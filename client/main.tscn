@@ -1,29 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://c8gs4ledvyyor"]
+[gd_scene load_steps=4 format=3 uid="uid://c8gs4ledvyyor"]
 
 [ext_resource type="Script" uid="uid://icc6mo0lnoj4" path="res://vr_startup.gd" id="1_startup"]
 [ext_resource type="PackedScene" uid="uid://b5d2xg3km218p" path="res://models/floor.glb" id="2_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://b8c6ejdgrref4" path="res://models/wall.glb" id="3_h2yge"]
-[ext_resource type="Script" path="res://debug/debug_geometry_v2.gd" id="4_debug"]
 
 [sub_resource type="Environment" id="Environment_ig7tw"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_v1"]
-size = Vector3(0.2, 0.2, 0.2)
-
-[sub_resource type="BoxMesh" id="BoxMesh_v2"]
-size = Vector3(0.2, 0.2, 0.2)
-
-[sub_resource type="BoxMesh" id="BoxMesh_v3"]
-size = Vector3(0.2, 0.2, 0.2)
-
-[sub_resource type="BoxMesh" id="BoxMesh_v4"]
-size = Vector3(0.2, 0.2, 0.2)
-
-[sub_resource type="BoxMesh" id="BoxMesh_v5"]
-size = Vector3(0.2, 0.2, 0.2)
-
-[sub_resource type="BoxMesh" id="BoxMesh_v6"]
-size = Vector3(0.2, 0.2, 0.2)
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_startup")
@@ -52,7 +33,6 @@ shadow_enabled = true
 environment = SubResource("Environment_ig7tw")
 
 [node name="floor" parent="Environment" instance=ExtResource("2_0xm2m")]
-script = ExtResource("4_debug")
 
 [node name="HexagonalRoom" type="Node3D" parent="Environment"]
 
@@ -73,29 +53,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.464, 2, 0)
 
 [node name="Wall6" parent="Environment/HexagonalRoom" instance=ExtResource("3_h2yge")]
 transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -1.732, 2, -3)
-
-[node name="DebugVertices" type="Node3D" parent="Environment"]
-
-[node name="V1" type="MeshInstance3D" parent="Environment/DebugVertices"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
-mesh = SubResource("BoxMesh_v1")
-
-[node name="V2" type="MeshInstance3D" parent="Environment/DebugVertices"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.464, 0, -2)
-mesh = SubResource("BoxMesh_v2")
-
-[node name="V3" type="MeshInstance3D" parent="Environment/DebugVertices"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.464, 0, 2)
-mesh = SubResource("BoxMesh_v3")
-
-[node name="V4" type="MeshInstance3D" parent="Environment/DebugVertices"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
-mesh = SubResource("BoxMesh_v4")
-
-[node name="V5" type="MeshInstance3D" parent="Environment/DebugVertices"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.464, 0, 2)
-mesh = SubResource("BoxMesh_v5")
-
-[node name="V6" type="MeshInstance3D" parent="Environment/DebugVertices"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.464, 0, -2)
-mesh = SubResource("BoxMesh_v6")
