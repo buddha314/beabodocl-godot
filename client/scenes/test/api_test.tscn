@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b1a2v3n4m5k6"]
+
+[ext_resource type="Script" path="res://scripts/api/api_test.gd" id="1_test"]
+
+[node name="APITest" type="Node"]
+script = ExtResource("1_test")

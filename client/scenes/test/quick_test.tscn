@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://quick_api_test"]
+
+[ext_resource type="Script" path="res://scripts/api/quick_test.gd" id="1_quick"]
+
+[node name="QuickAPITest" type="Node"]
+script = ExtResource("1_quick")
