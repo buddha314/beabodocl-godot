@@ -1,12 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://c8gs4ledvyyor"]
+[gd_scene load_steps=5 format=3 uid="uid://c8gs4ledvyyor"]
 
-[ext_resource type="Script" path="res://vr_startup.gd" id="1_startup"]
+[ext_resource type="Script" uid="uid://icc6mo0lnoj4" path="res://vr_startup.gd" id="1_startup"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_floor"]
 size = Vector3(10, 0.1, 10)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
 albedo_color = Color(0.3, 0.3, 0.35, 1)
+
+[sub_resource type="Environment" id="Environment_ig7tw"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_startup")
@@ -32,9 +34,8 @@ light_energy = 0.8
 shadow_enabled = true
 
 [node name="Floor" type="MeshInstance3D" parent="Environment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("BoxMesh_floor")
 surface_material_override/0 = SubResource("StandardMaterial3D_floor")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
-
+environment = SubResource("Environment_ig7tw")

@@ -66,12 +66,24 @@ After analyzing the Godot repository and OpenXR implementation, here are the key
    - SDK Platform: Android 10.0 (API level 29) or higher
    - NDK: r23c or later
    - Build Tools: Latest
+   - **Java SDK**: Bundled with Android Studio at `C:\Program Files\Android\Android Studio\jbr`
 
-3. **Meta Quest Developer Hub** (for Quest 3)
+3. **Godot OpenXR Vendors Plugin** (for Quest 3 support)
+   - **Installation Method 1 (Recommended)**: Asset Library
+     - In Godot: `AssetLib` tab → Search "OpenXR Vendors"
+     - Download "Godot OpenXR Vendors plugin v4"
+     - Install to `addons/godotopenxrvendors/`
+   - **Installation Method 2**: Manual Download
+     - Download from: https://github.com/GodotVR/godot_openxr_vendors/releases
+     - Get version 4.1.1-stable (for Godot 4.4+)
+     - Extract `assets/addons/godotopenxrvendors/` to your project's `addons/` folder
+   - **⚠️ CRITICAL**: You must enable the Meta plugin in export settings (see Quest 3 Deployment Setup)
+
+4. **Meta Quest Developer Hub** (for Quest 3)
    - Download: https://developer.oculus.com/downloads/package/oculus-developer-hub-win/
    - Enables USB debugging, app deployment, and performance profiling
 
-4. **Git** (version control)
+5. **Git** (version control)
    - Download: https://git-scm.com/
 
 ### Optional Software
@@ -148,11 +160,24 @@ Once Godot project is created:
    - **View Configuration**: `Stereo`
    - **Reference Space**: `Stage` (or `Local Floor` for seated experiences)
    - **Submit Depth Buffer**: `ON` (improves performance)
+   - ⚠️ **CRITICAL**: Navigate to `XR > Shaders` and set **Enabled**: `ON`
+     - This is required for XR-specific shader support
+     - Must be set manually in Project Settings UI or in `project.godot`
 
 3. **Configure Rendering**:
    - `Rendering > Renderer > Rendering Method`: `Forward+`
    - `Rendering > Anti-Aliasing > MSAA 3D`: `4x` (or `2x` for better performance)
    - `Rendering > VRS > Mode`: `Texture` (if using foveated rendering)
+
+3b. **⚠️ MANUAL STEP: Add WorldEnvironment to Scene**:
+   - In your main VR scene (`main.tscn`), add a `WorldEnvironment` node
+   - Click the node and in Inspector, create a new `Environment` resource
+   - Configure environment settings:
+     - Background Mode: `Sky` or `Color`
+     - Ambient Light: Source = `Sky` or `Color`
+     - Tonemap: Mode = `Filmic` (better for VR)
+     - Glow: Enable if desired (subtle glow for holographic effect)
+   - This is required for proper lighting and rendering in VR
 
 4. **Set Target Framerate**:
    - `Application > Run > Max FPS`: `90` (Quest 2/3 native refresh)
@@ -185,6 +210,7 @@ openxr/startup_alert=true  # Shows OpenXR errors on startup
 openxr/environment_blend_mode=0  # 0 = Opaque (VR), 1 = Additive (AR), 2 = Alpha (passthrough)
 openxr/foveation_level=0  # 0 = Off, 1 = Low, 2 = Medium, 3 = High (Quest only)
 openxr/foveation_dynamic=false
+shaders/enabled=true  # REQUIRED: Enables XR-specific shaders (must be set manually)
 
 [xr/openxr/extensions]
 
@@ -238,7 +264,11 @@ Godot 4.5.1 supports these OpenXR extensions (auto-enabled when available):
 3. **Create Android Export Preset**:
    - `Project > Export`
    - Add `Android` preset
+   - **Name**: `Quest 3` (or your preferred name)
+   - **Runnable**: ✓ (enable for one-click deploy)
+   - **Use Gradle Build**: ✓ **CRITICAL - Must be enabled**
    - **XR Features > XR Mode**: `OpenXR`
+   - **XR Features > Enable Meta Plugin**: ✓ **CRITICAL - Required for Quest 3**
    - **Target**: Meta Quest 3 (ARM64)
    - **OpenXR Features > Hand Tracking**: `Optional` (Quest 3 has improved hand tracking)
    - **OpenXR Features > Passthrough**: `Optional` (if using mixed reality features)
@@ -250,6 +280,52 @@ Godot 4.5.1 supports these OpenXR extensions (auto-enabled when available):
    - `Project > Export > Debug`
    - Select Quest device
    - Deploy and test
+
+---
+
+## Remote Deploy from Godot Editor (Recommended for Testing)
+
+**One-Click Deploy to Quest 3**
+
+Instead of manually building and installing APKs, Godot can deploy directly to your connected Quest 3 for faster iteration:
+
+### Setup Remote Deploy
+
+1. **Ensure Quest 3 is connected via USB**:
+   - Developer Mode enabled
+   - USB debugging authorized
+   - Verify with: `adb devices` (should show your Quest)
+
+2. **In Godot Editor**:
+   - Click the **Remote Debug** button (next to Play button in top-right)
+   - Select your **Android** export preset from dropdown
+   - Click **Deploy Remote Debug**
+   
+3. **What happens**:
+   - Godot builds a debug APK automatically
+   - Installs it directly to Quest 3 via adb
+   - Launches the app immediately
+   - Connects remote debugger for live console output
+   - You can see errors/print statements in Godot's Output panel
+
+### Using Remote Debug
+
+**Workflow:**
+1. Make changes in Godot
+2. Click **Deploy Remote Debug** (or press configured hotkey)
+3. Godot builds, installs, and launches automatically
+4. Put on headset to test
+5. Check Godot's **Output** tab for errors/logs
+6. Repeat
+
+**Benefits:**
+- ✅ Faster than manual export/install
+- ✅ Live debugging output in Godot editor
+- ✅ Automatic rebuilds include all project files
+- ✅ Can set breakpoints and debug GDScript
+- ✅ Sees real-time performance metrics
+
+**Note:** The first remote deploy may take longer as it builds everything. Subsequent deploys are incremental and faster.
 
 ---
 
@@ -331,6 +407,9 @@ Godot 4.5.1 supports these OpenXR extensions (auto-enabled when available):
 ### Issue: Black screen in headset
 
 **Solution**:
+- ⚠️ **MOST COMMON**: Check `WorldEnvironment` node has an `Environment` resource attached
+  - Select WorldEnvironment node → Inspector → Environment → New Environment
+  - Without this, the scene will appear black
 - Check XROrigin3D node is in scene
 - Verify XRCamera3D is child of XROrigin3D
 - Ensure rendering method is Forward+ (not Mobile)
