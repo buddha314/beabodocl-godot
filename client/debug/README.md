@@ -5,6 +5,95 @@
 
 ---
 
+## ⚠️ CRITICAL WARNING #1: NEVER USE `log()` AS FUNCTION NAME ⚠️
+
+**GDScript has a built-in `log()` math function (natural logarithm)!**
+
+Using `log()` as a custom function name will cause **parse errors**:
+```
+ERROR: Invalid argument for "log()" function: argument 1 should be "float" but is "String"
+```
+
+### ✅ ALWAYS use `log_msg()` or another name:
+
+```gdscript
+# ❌ WRONG - Conflicts with built-in log(x) math function
+func log(message: String):
+    print(message)
+
+# ✅ CORRECT - Use log_msg() instead
+func log_msg(message: String):
+    print(message)
+```
+
+---
+
+## 🔴 CRITICAL #2: Debug Script Best Practice for AI Collaboration
+
+**⚠️ ALWAYS write debug output to a log file that the AI agent can read.**
+
+### Why File Output is Essential:
+- **AI agents CANNOT see Godot's console output directly**
+- Log files enable AI to analyze debug data and provide solutions
+- Persistent logs help track issues across sessions
+- External tools can parse geometry data from files
+
+### Standard Pattern for ALL Debug Scripts:
+
+```gdscript
+extends Node3D
+
+var output_lines = []
+
+func _ready():
+    # Your debug logic here
+    log_msg("Debug information: " + str(some_value))
+    log_msg("Position: " + str(global_position))
+    
+    # ALWAYS write to file at the end
+    write_log_file()
+
+func log_msg(message: String):
+    """Add message to output and print to console"""
+    print(message)
+    output_lines.append(message)
+
+func write_log_file():
+    """Write debug output to file - REQUIRED for AI collaboration"""
+    var file_path = "res://debug/your_debug_output.log"
+    var file = FileAccess.open(file_path, FileAccess.WRITE)
+    
+    if file:
+        for line in output_lines:
+            file.store_line(line)
+        file.close()
+        
+        # Print absolute path so AI knows where to read
+        var absolute_path = ProjectSettings.globalize_path(file_path)
+        log_msg("\n=== LOG FILE WRITTEN ===")
+        log_msg("Absolute path: " + absolute_path)
+    else:
+        print("ERROR: Could not write log file")
+```
+
+### ⚠️ Critical Don'ts:
+1. **NEVER use `log()` as a function name** - conflicts with GDScript's built-in logarithm function
+2. Use `log_msg()`, `debug_log()`, or `write_debug()` instead
+3. Don't rely on console output alone - AI can't see it
+4. Don't forget to call `write_log_file()` at the end of `_ready()`
+
+### File Naming Convention:
+```
+res://debug/collision_debug_output.log
+res://debug/geometry_debug_output.log
+res://debug/transform_debug_output.log
+res://debug/<feature>_debug_output.log
+```
+
+All debug logs go in `client/debug/*.log` to keep them organized.
+
+---
+
 ## Available Scripts
 
 ### 1. `debug_geometry_v2.gd` (Recommended)

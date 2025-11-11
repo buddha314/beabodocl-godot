@@ -881,6 +881,456 @@ Document the decision with:
 
 ---
 
+## Issue #7: Blender Asset Orientation Standard
+
+**Labels**: `P0`, `foundation`, `assets`, `standards`, `decision`  
+**Milestone**: Phase 0 - Foundation  
+**Assignee**: @buddha314  
+**Status**: 🔴 Blocking Phase 1 screen positioning
+
+### Problem Statement
+
+Currently, our Blender assets have inconsistent orientations when exported to Godot GLB format, causing confusion during positioning and rotation:
+
+- **Wall assets**: Wide along Blender Y-axis
+- **Screen assets**: Rotated 90° in Blender, wide along Y-axis  
+- **Result**: Complex rotation calculations needed in Godot to align assets correctly
+
+This inconsistency makes it difficult to:
+1. Predictably position assets in Godot scenes
+2. Calculate rotations for assets to face specific directions
+3. Maintain code that works across different asset types
+4. Enable AI assistance (unclear coordinate system mapping)
+
+### Proposed Solution
+
+Establish a **standard orientation convention** for all 3D assets exported from Blender to Godot.
+
+### Convention Options
+
+#### Option A: Y-Forward (Blender Default)
+- **Forward direction**: +Y axis in Blender → -Z axis in Godot
+- **Width/Horizontal**: +X axis in Blender → +X axis in Godot
+- **Height/Up**: +Z axis in Blender → +Y axis in Godot
+
+**Pros:**
+- Blender's default orientation
+- No changes needed to Blender workspace
+
+**Cons:**
+- Requires mental translation when working in Godot
+- 90° rotation offset in all positioning code
+- Confusing for developers switching between tools
+
+#### Option B: Z-Forward (Godot-Aligned) ⭐ RECOMMENDED
+- **Forward direction**: -Z axis in Blender → -Z axis in Godot
+- **Width/Horizontal**: +X axis in Blender → +X axis in Godot  
+- **Height/Up**: +Y axis in Blender → +Y axis in Godot
+
+**Pros:**
+- ✅ Aligns Blender workspace with Godot coordinate system
+- ✅ Reduces mental translation between tools
+- ✅ Simplifies rotation calculations (no 90° offset needed)
+- ✅ Industry standard for game engine exports
+- ✅ AI assistance can reason about assets clearly
+
+**Cons:**
+- Requires Blender viewport configuration change
+- Existing assets need re-export
+
+### Recommendation: Option B (Z-Forward)
+
+**Rationale:**
+1. Godot uses -Z as forward direction universally
+2. Eliminates coordinate system translation errors
+3. Makes asset positioning intuitive and predictable
+4. Follows industry best practices (Unity, Unreal also use Z-forward)
+5. Reduces debugging time for rotation issues
+
+### Implementation Plan
+
+1. **Blender Configuration:**
+   - Set Blender to use -Z forward in export settings
+   - Configure Blender viewport to match (optional but helpful)
+   - Create Blender startup file with correct settings
+
+2. **Asset Modeling Standard:**
+   - Model all assets with **front face facing -Z direction**
+   - **Width** along X-axis
+   - **Height** along Y-axis (Blender) → will be Y-axis in Godot
+
+3. **Export Settings (Blender → glTF/GLB):**
+   ```
+   Format: glTF Binary (.glb)
+   Forward: -Z Forward
+   Up: Y Up
+   Apply Modifiers: Yes
+   UVs: Yes
+   Materials: Export
+   ```
+
+4. **Re-export Existing Assets:**
+   - [ ] `models/floor.glb` - Verify already correct
+   - [ ] `models/wall.glb` - Re-export with Z-forward
+   - [ ] `models/screen.glb` - Re-export with Z-forward (remove 90° rotation)
+
+5. **Documentation:**
+   - Update `BLENDER_ASSET_PIPELINE.md` with standard
+   - Add visual diagrams showing axis orientation
+   - Create export checklist for future assets
+
+### Documentation Template
+
+Add to `BLENDER_ASSET_PIPELINE.md`:
+
+````markdown
+## Asset Orientation Standard
+
+**All assets MUST follow Z-forward convention:**
+
+### Blender Modeling Requirements
+- **Forward face**: -Z axis (pointing toward you in Front view F1)
+- **Width**: X-axis (left/right)
+- **Height**: Y-axis (up/down)
+
+### Visual Guide
+```
+      Y (Up)
+      |
+      |
+      +---- X (Right)
+     /
+    /
+   Z (Forward, toward you)
+```
+
+### Export Settings (glTF/GLB)
+- **Forward**: -Z Forward  
+- **Up**: Y Up
+- **Format**: glTF Binary (.glb)
+- **Include**: UVs, Materials, Apply Modifiers
+
+### Verification
+Before exporting, verify in Blender:
+1. Switch to Front view (Numpad 1)
+2. The **front** of your asset should face you (-Z direction)
+3. Width spans left-right (X-axis)
+4. Height spans up-down (Y-axis)
+
+### Common Mistakes
+❌ Modeling wide along Y-axis (Blender default)
+❌ Using +Z forward instead of -Z
+❌ Forgetting to apply rotation before export
+
+✅ Model front-facing in Front view (-Z)
+✅ Use -Z Forward export setting
+✅ Apply all transforms (Ctrl+A) before export
+````
+
+### Affected Assets
+
+| Asset | Current State | Action Required |
+|-------|--------------|-----------------|
+| `floor.glb` | Unknown orientation | Verify, likely OK |
+| `wall.glb` | Wide along Y-axis | Re-export with Z-forward |
+| `screen.glb` | Rotated 90° in Blender | Re-export with Z-forward, remove rotation |
+
+### Testing After Re-export
+
+Create test scene:
+```gdscript
+# Test script to verify asset orientations
+extends Node3D
+
+func _ready():
+    var wall = preload("res://models/wall.glb").instantiate()
+    add_child(wall)
+    
+    # Forward direction should be -Z
+    var forward = -wall.global_transform.basis.z
+    print("Wall forward: ", forward)
+    # Expected: (0, 0, -1) when rotationY = 0
+    
+    # Width should be along X
+    var right = wall.global_transform.basis.x
+    print("Wall right: ", right)
+    # Expected: (1, 0, 0)
+```
+
+### Benefits
+
+- ✅ Predictable asset behavior when instantiated
+- ✅ Simpler rotation math in GDScript
+- ✅ Easier debugging (no coordinate translation)
+- ✅ AI assistance can reason correctly about orientations
+- ✅ Follows game industry standards
+- ✅ Reduces onboarding time for new developers
+
+### Acceptance Criteria
+
+- [ ] Convention decision documented (Option A or B)
+- [ ] `BLENDER_ASSET_PIPELINE.md` updated with standard
+- [ ] All existing assets re-exported with correct orientation
+- [ ] Test scene created to verify asset orientations
+- [ ] Current Phase 1 screen positioning issues resolved
+- [ ] Template Blender file created with correct export settings
+
+### Dependencies
+
+- Issue #6 (Blender Pipeline) should be complete
+- Current Phase 1 work is **blocked** until this is resolved
+
+### Estimated Time
+
+**Decision + Documentation**: 1-2 hours  
+**Re-exporting Assets**: 2-3 hours  
+**Testing + Verification**: 1-2 hours  
+**Total**: 4-7 hours
+
+### Priority
+
+**🔴 P0 - CRITICAL** - Blocking current Phase 1 screen positioning work
+
+### References
+
+- Current blocking issue: Screen positioning in hexagonal room
+- `BLENDER_ASSET_PIPELINE.md` - Will be updated with decision
+- Godot coordinate system: https://docs.godotengine.org/en/stable/tutorials/3d/introduction_to_3d.html
+- glTF axis conventions: https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#coordinate-system-and-units
+
+---
+
+## Issue #8: Research Snap-to-Surface / Asset Placement Systems
+
+**Labels**: `research`, `P1`, `architecture`, `ux`, `plugins`  
+**Milestone**: Phase 2.5 - Document Display  
+**Assignee**: TBD  
+**Status**: 🔵 Research Phase
+
+### Problem Statement
+
+We need a robust system for placing 2D/3D assets (documents, images, visualizations) onto surfaces (walls, panels) in VR. Users should be able to:
+
+1. **Grab** a document/image in VR
+2. **Approach** a wall or panel
+3. **Snap** the asset to the surface automatically
+4. **Align** the asset perpendicular to the surface
+5. **Position** the asset at the correct distance (e.g., 5cm from surface)
+
+**Example Use Case:**
+- User loads a research paper PDF as a 2D panel
+- User drags panel toward Wall 4 in hexagonal room
+- System detects proximity to wall
+- Panel snaps to wall surface, rotates to face outward
+- Panel positioned 5cm in front of wall
+
+This is critical for the document display system where multiple papers may be pinned to walls for reference.
+
+### Research Questions
+
+1. **Does Godot have built-in snapping systems?**
+   - Grid snapping (editor only?)
+   - Surface snapping
+   - Collision-based placement
+
+2. **Are there existing Godot plugins/addons for this?**
+   - Asset placement tools
+   - VR interaction libraries with snap-to-surface
+   - Level design tools with surface detection
+
+3. **What approaches do other VR apps use?**
+   - SteamVR Home (item placement)
+   - VRChat world building
+   - Horizon Worlds placement system
+   - Unity XR Interaction Toolkit (for reference)
+
+4. **What's the best architecture for this?**
+   - Raycast-based detection
+   - Collision area triggers
+   - Nearest surface algorithm
+   - Magnet/snap zones on walls
+
+### Potential Solutions to Research
+
+#### Option A: Godot XR Tools
+**Repository**: https://github.com/GodotVR/godot-xr-tools
+
+- Check if it has snap-to-surface functionality
+- Review interactable objects system
+- Check for placement helpers
+
+#### Option B: Custom Raycast System
+```gdscript
+# Conceptual approach
+func place_asset_on_surface(asset: Node3D, controller: XRController3D):
+    # Raycast from asset to nearest surfaces
+    var space_state = get_world_3d().direct_space_state
+    var query = PhysicsRayQueryParameters3D.create(
+        asset.global_position,
+        asset.global_position + Vector3(0, 0, -1) * 10.0
+    )
+    
+    var result = space_state.intersect_ray(query)
+    if result:
+        # Snap to surface
+        asset.global_position = result.position + result.normal * 0.05
+        # Align to surface normal
+        asset.look_at(asset.global_position + result.normal, Vector3.UP)
+```
+
+#### Option C: Proximity Trigger Zones
+- Add Area3D nodes to each wall
+- Detect when asset enters proximity
+- Calculate snap position based on wall transform
+- Apply smooth interpolation to snap position
+
+#### Option D: Existing Unity Reference (for ideas)
+- Unity XR Interaction Toolkit has "Socket Interactors"
+- Snap zones with validation
+- Could inspire Godot implementation
+
+### Research Deliverables
+
+- [ ] **Survey Report**: Document of findings
+  - List of relevant Godot plugins/addons
+  - Built-in Godot features that help
+  - VR app examples and approaches
+  - Performance considerations for VR
+
+- [ ] **Comparison Matrix**:
+
+| Solution | Pros | Cons | Complexity | VR Performance |
+|----------|------|------|------------|----------------|
+| Godot XR Tools | Maintained, VR-focused | May not have snap-to-surface | Low | Good |
+| Custom Raycast | Full control, simple | Need to implement from scratch | Medium | Excellent |
+| Proximity Zones | Easy to set up | Less flexible | Low | Good |
+| Physics-based | Accurate collision | Overkill for this use case | High | Moderate |
+
+- [ ] **Recommended Approach**: 
+  - Which solution to implement
+  - Why it's best for our use case
+  - Implementation complexity estimate
+  - Example code/pseudocode
+
+- [ ] **Prototype (Optional)**:
+  - Simple test scene demonstrating concept
+  - Cube that snaps to wall when thrown
+  - VR controller interaction
+
+### Specific Features Needed
+
+1. **Surface Detection**:
+   - Detect walls, panels, floor, ceiling
+   - Prioritize closest surface within threshold (e.g., 0.5m)
+   - Filter by surface type (only snap to walls/panels, not floor)
+
+2. **Alignment**:
+   - Rotate asset to face perpendicular to surface
+   - Align "up" direction with surface's local up
+   - Handle corner cases (ceiling, angled surfaces)
+
+3. **Offset Control**:
+   - Configurable distance from surface (5cm default)
+   - Prevent z-fighting with surface
+   - Account for asset thickness
+
+4. **Visual Feedback**:
+   - Preview ghost/outline when near surface
+   - Haptic feedback when snap triggers
+   - Color change or glow to indicate snap zone
+
+5. **Multi-Surface Support**:
+   - Walls (vertical surfaces)
+   - Panels (holographic displays)
+   - Floor (optional, for 3D objects)
+   - Ceiling (optional)
+
+6. **VR Performance**:
+   - Run at 90 FPS on Quest 3
+   - Efficient raycasting (not every frame?)
+   - Minimal draw calls for preview/feedback
+
+### Use Cases to Support
+
+**Primary:**
+- Placing document panels on walls
+- Positioning visualizations on display panels
+- Pinning reference images to surfaces
+
+**Secondary:**
+- Placing 3D models on floor/tables (future)
+- Attaching UI elements to controller (future)
+- Organizing workspace items spatially
+
+### Acceptance Criteria
+
+- [ ] Research completed and documented
+- [ ] At least 3 approaches evaluated
+- [ ] Comparison matrix filled out
+- [ ] Recommended approach selected with rationale
+- [ ] Example code or prototype created
+- [ ] Performance considerations documented
+- [ ] Integration plan with existing codebase outlined
+
+### Technical Constraints
+
+- Must work in VR (Quest 3 target)
+- Must maintain 90 FPS
+- Should work with XRController3D input
+- Must handle arbitrary asset sizes
+- Should support undo/repositioning
+
+### Research Timeline
+
+**Week 1:**
+- [ ] Survey Godot plugins and addons
+- [ ] Review Godot XR Tools documentation
+- [ ] Research VR placement systems (Unity, other engines)
+
+**Week 2:**
+- [ ] Test 2-3 approaches with prototype scenes
+- [ ] Benchmark performance on Quest 3 (if possible)
+- [ ] Create comparison matrix
+
+**Week 3:**
+- [ ] Document recommended approach
+- [ ] Write example implementation
+- [ ] Create GitHub issue for implementation phase
+
+### Dependencies
+
+- Issue #1 (Godot VR setup) complete
+- Issue #3 (Hexagonal room) complete for testing
+- Access to Quest 3 hardware (optional but recommended)
+
+### Estimated Time
+
+**Research**: 8-12 hours  
+**Prototyping**: 4-6 hours  
+**Documentation**: 2-3 hours  
+**Total**: 14-21 hours
+
+### Follow-up Issues
+
+After research, create implementation issue:
+- **Issue #9**: Implement Snap-to-Surface System (based on findings)
+
+### References
+
+- Godot XR Tools: https://github.com/GodotVR/godot-xr-tools
+- Godot Physics Raycast: https://docs.godotengine.org/en/stable/classes/class_physicsrayqueryparameters3d.html
+- Unity XR Toolkit (reference): https://docs.unity3d.com/Packages/com.unity.xr.interaction.toolkit@2.0/manual/index.html
+- VR Best Practices: https://developer.oculus.com/resources/bp-locomotion/
+
+### Success Metrics
+
+- Clear recommendation for implementation approach
+- Working prototype demonstrating core concept
+- Performance validated (90 FPS on Quest 3)
+- Team consensus on selected approach
+
+---
+
 ## Summary of Issues
 
 **Phase 0 - Foundation:**
