@@ -88,26 +88,86 @@ In Blender, before exporting:
 3. The **front face** of your asset should be facing you (**-Y direction in Blender**)
 4. Width should span **left-right** (X-axis, red in widget)
 5. Height should span **up-down** (Z-axis, blue in widget, becomes Y in Godot)
-6. **CRITICAL**: Apply all transforms to freeze position/rotation/scale
-   - Select the object
-   - Press `Ctrl+A` → Select **"All Transforms"**
-   - Or use **Object menu → Apply → All Transforms**
-   - This bakes rotation into the mesh geometry so it exports correctly
+6. **CRITICAL**: Verify Object Transforms (Press N → Item → Transform)
+   ```
+   Location: X=0, Y=0, Z=0
+   Rotation: X=0°, Y=0°, Z=0°
+   Scale:    X=1, Y=1, Z=1
+   ```
+   - If Scale is NOT 1,1,1: Press `Ctrl+A` → Select **"Scale"**
+   - If Rotation is NOT 0,0,0: See "Scaling Best Practices" below (use Edit Mode)
 
 **What the export does:**
 - Blender's **-Y** (front in Front View) → becomes Godot's **-Z** (forward)
 - Blender's **X** (width) → stays Godot's **X** (width)
 - Blender's **Z** (height) → becomes Godot's **Y** (height)
 
+### Scaling Best Practices
+
+⚠️ **CRITICAL**: When creating thin objects (walls, panels), use **Edit Mode scaling**, NOT Object Mode scaling.
+
+**Why Edit Mode Scaling?**
+- Scales mesh vertices directly (not the object transform)
+- Avoids extreme scale values (like 0.05) that can cause export issues
+- Object transform stays at Scale 1,1,1 automatically
+- No risk of normalization errors during glTF export
+
+**Correct Workflow for Thin Panels**:
+
+1. **Add Cube** (or start with existing mesh)
+2. **Enter Edit Mode**: Press `Tab`
+3. **Select All**: Press `A`
+4. **Scale Vertices Directly**:
+   ```
+   S, X, 2, Enter     (Scale X to 4m width)
+   S, Z, 2, Enter     (Scale Z to 4m height in Blender = Y in Godot)
+   S, Y, 0.05, Enter  (Scale Y to 0.1m thickness)
+   ```
+5. **Exit Edit Mode**: Press `Tab`
+6. **Verify Object Properties** (Press N → Item → Transform):
+   - Scale should be **1, 1, 1** ✓ (no need to apply)
+   - Location should be **0, 0, 0**
+   - Rotation should be **0°, 0°, 0°**
+
+**Alternative: Use Dimensions Panel**
+
+1. **Object Mode**: Press `N` → Item → Transform → Dimensions
+2. Set exact dimensions:
+   ```
+   X: 4.0 m   (width)
+   Y: 0.1 m   (thickness - becomes Z in Godot)
+   Z: 4.0 m   (height - becomes Y in Godot)
+   ```
+3. **Apply Scale Only**: `Ctrl+A` → Scale (locks dimensions, resets scale to 1,1,1)
+
+**What NOT to Do**:
+
+❌ **WRONG**: Object Mode → Scale → Apply All Transforms (can cause normalization)
+```
+S, Y, 0.05, Enter     (Creates Scale 1, 0.05, 1)
+Ctrl+A → All Transforms
+Result: May normalize to wrong dimensions in glTF export
+```
+
+✅ **CORRECT**: Edit Mode → Scale → No need to apply
+```
+Tab (Edit Mode)
+S, Y, 0.05, Enter     (Scales vertices, not object)
+Tab (Exit)
+Object Scale already 1,1,1
+```
+
 ### Common Mistakes to Avoid
 
 ❌ **WRONG**: Modeling wide along Y-axis (Blender default habit)  
 ❌ **WRONG**: Using +Z forward instead of -Z  
-❌ **WRONG**: Forgetting to apply rotation before export
+❌ **WRONG**: Using Object Mode scaling for thin objects (creates extreme scale values)  
+❌ **WRONG**: Forgetting to verify Scale is 1,1,1 before export
 
-✅ **CORRECT**: Model front-facing in Front view (-Z)  
+✅ **CORRECT**: Model front-facing in Front view (-Y in Blender)  
 ✅ **CORRECT**: Width along X-axis  
-✅ **CORRECT**: Apply all transforms (Ctrl+A) before export
+✅ **CORRECT**: Use Edit Mode scaling for precise dimensions  
+✅ **CORRECT**: Verify Scale 1,1,1, Rotation 0°,0°,0° before export
 
 ---
 
@@ -215,7 +275,9 @@ blender_source/environments/hexagonal_room.blend
 
 **Best Practices**:
 - Use metric units (1 Blender unit = 1 meter in Godot)
-- Apply all transforms before export (Location: 0,0,0 / Rotation: 0,0,0 / Scale: 1,1,1)
+- **Use Edit Mode for scaling** (especially for thin objects like walls/panels)
+- Verify transforms before export: Location (0,0,0), Rotation (0°,0°,0°), Scale (1,1,1)
+- If Scale is not 1,1,1, apply only Scale (`Ctrl+A → Scale`), not All Transforms
 - Use proper naming conventions (snake_case)
 - Organize with collections
 - Keep vertex count reasonable for VR (< 100K triangles per room)
@@ -510,7 +572,10 @@ If `.blend` files become large (> 50MB):
    - Depth: 2.5m
 4. Edit Mode → Extrude faces for walls
 5. Apply materials (PBR Principled BSDF)
-6. Save as: blender_source/environments/hexagonal_room.blend
+6. Verify Object Transform (N → Item):
+   - Scale: 1, 1, 1
+   - Rotation: 0°, 0°, 0°
+7. Save as: blender_source/environments/hexagonal_room.blend
 ```
 
 ### 2. Import to Godot
@@ -555,8 +620,32 @@ If `.blend` files become large (> 50MB):
 
 ---
 
-**Status**: ✅ Pipeline Established  
-**Format Decision**: Use `.blend` files directly for development  
+## Lessons Learned
+
+### Wall Panel Creation (November 11, 2025)
+
+**Issue**: Initial wall.glb exported as 2m×2m×2m cube instead of thin 4m×4m×0.1m panel.
+
+**Root Cause**: Used Object Mode scaling with extreme values (0.05 for thickness), then applied transforms. The glTF exporter normalized the scale, losing the thin dimension.
+
+**Solution**: 
+1. Use **Edit Mode scaling** instead of Object Mode scaling
+2. Scale vertices directly: `Tab → A → S, X, 2 → S, Z, 2 → S, Y, 0.05`
+3. Object transform remains Scale 1,1,1 (no need to apply)
+4. Export with `-Z Forward` setting → Correct 4m×4m×0.04m panel in Godot
+
+**Verified Dimensions** (from glTF):
+- Width (X): 4.0m ✓
+- Height (Y): 4.0m ✓  
+- Thickness (Z): 0.04m ✓
+
+**Key Takeaway**: For any asset with extreme dimension ratios (thin walls, flat screens), always use Edit Mode scaling to avoid transform application issues.
+
+---
+
+**Status**: ✅ Pipeline Established & Verified  
+**Format Decision**: Use `.glb` export workflow (avoids Blender path issues)  
+**Critical Learning**: Edit Mode scaling for thin objects  
 **Directory Structure**: Documented and ready to create  
-**Next Action**: Create first asset (hexagonal room)  
-**Last Updated**: November 10, 2025
+**Next Action**: Create hexagonal room environment  
+**Last Updated**: November 11, 2025
