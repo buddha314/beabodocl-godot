@@ -1,12 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://c8gs4ledvyyor"]
+[gd_scene load_steps=10 format=3 uid="uid://c8gs4ledvyyor"]
 
-[ext_resource type="Script" path="res://vr_startup.gd" id="1_startup"]
-[ext_resource type="PackedScene" path="res://models/floor.glb" id="2_floor"]
-[ext_resource type="PackedScene" path="res://models/wall.glb" id="3_wall"]
-[ext_resource type="Script" path="res://debug/debug_asset_dimensions.gd" id="4_debug_dims"]
-[ext_resource type="PackedScene" path="res://models/screen.glb" id="5_screen"]
-[ext_resource type="Script" path="res://debug/debug_screen_facing.gd" id="6_screen_debug"]
-[ext_resource type="Script" path="res://debug/check_wall_orientation.gd" id="7_wall_check"]
+[ext_resource type="Script" uid="uid://icc6mo0lnoj4" path="res://vr_startup.gd" id="1_startup"]
+[ext_resource type="PackedScene" uid="uid://b5d2xg3km218p" path="res://models/floor.glb" id="2_floor"]
+[ext_resource type="PackedScene" uid="uid://b8c6ejdgrref4" path="res://models/wall.glb" id="3_wall"]
+[ext_resource type="Script" uid="uid://celefdirb0rnb" path="res://debug/debug_asset_dimensions.gd" id="4_debug_dims"]
+[ext_resource type="PackedScene" uid="uid://bekq8tos3nkqd" path="res://models/screen.glb" id="5_screen"]
+[ext_resource type="Script" uid="uid://b6sj2jabpefa7" path="res://debug/debug_screen_facing.gd" id="6_screen_debug"]
+[ext_resource type="Script" uid="uid://dv8862pqo00fx" path="res://debug/check_wall_orientation.gd" id="7_wall_check"]
+[ext_resource type="Script" uid="uid://byolnbdal2xd" path="res://debug/fix_wall_facing.gd" id="8_fix_walls"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_vertex"]
 size = Vector3(0.2, 0.2, 0.2)
@@ -22,6 +23,9 @@ script = ExtResource("6_screen_debug")
 
 [node name="WallOrientationCheck" type="Node3D" parent="."]
 script = ExtResource("7_wall_check")
+
+[node name="FixWallFacing" type="Node3D" parent="."]
+script = ExtResource("8_fix_walls")
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
 
@@ -48,22 +52,22 @@ shadow_enabled = true
 [node name="HexagonalRoom" type="Node3D" parent="Environment"]
 
 [node name="Wall1" parent="Environment/HexagonalRoom" instance=ExtResource("3_wall")]
-transform = Transform3D(-0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, -0.5, 1.732, 2, -3)
+transform = Transform3D(-0.8660255, 0, 0.5000001, 0, 1, 0, -0.5000001, 0, -0.8660255, 1.732, 2, -3)
 
 [node name="Wall2" parent="Environment/HexagonalRoom" instance=ExtResource("3_wall")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 3.464, 2, 0)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3.464, 2, 0)
 
 [node name="Wall3" parent="Environment/HexagonalRoom" instance=ExtResource("3_wall")]
-transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 1.732, 2, 3)
+transform = Transform3D(0.86602557, 0, 0.5000001, 0, 1, 0, -0.5000001, 0, 0.86602557, 1.732, 2, 3)
 
 [node name="Wall4" parent="Environment/HexagonalRoom" instance=ExtResource("3_wall")]
-transform = Transform3D(0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, 0.5, -1.732, 2, 3)
+transform = Transform3D(0.86602557, 0, -0.5000001, 0, 1, 0, 0.5000001, 0, 0.86602557, -1.732, 2, 3)
 
 [node name="Wall5" parent="Environment/HexagonalRoom" instance=ExtResource("3_wall")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.464, 2, 0)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -3.464, 2, 0)
 
 [node name="Wall6" parent="Environment/HexagonalRoom" instance=ExtResource("3_wall")]
-transform = Transform3D(0.5, 0, -0.866025, 0, 1, 0, 0.866025, 0, 0.5, -1.732, 2, -3)
+transform = Transform3D(-0.86602557, 0, -0.5000002, 0, 1, 0, 0.5000002, 0, -0.86602557, -1.732, 2, -3)
 
 [node name="Screens" type="Node3D" parent="Environment"]
 
@@ -74,7 +78,7 @@ transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3.354, 2.67, 0)
 transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -1.677, 2.67, 2.904)
 
 [node name="Screen6" parent="Environment/Screens" instance=ExtResource("5_screen")]
-transform = Transform3D(0, 0, 0.999999, 0, 1, 0, -0.999999, 0, 0, -1.677, 2.67, -2.904)
+transform = Transform3D(0.8660245, 0, 0.4999995, 0, 1, 0, -0.4999995, 0, 0.8660245, -1.677, 2.67, -2.904)
 
 [node name="DebugVertices" type="Node3D" parent="Environment"]
 
