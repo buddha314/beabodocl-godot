@@ -18,12 +18,16 @@ For backend setup instructions, see: https://github.com/buddha314/babocument
 
 ## Early Decisions
 
+* **Asset Workflow**: Blender-first (NOT procedural generation) ⭐ CRITICAL
+* **Development Tools**: Godot Editor + GDScript (not pure code)
 * Which Godot Version to use that support VR/XR well.
-* Which Godot MCP client to use
-* Blender hand-off process. Save `.blend` or something else?
+* Blender hand-off process. Save `.blend` or something else? (See Issue #6)
 
 ## General Notes
 
+* **Asset Creation**: All 3D assets developed in Blender, NOT procedurally generated
+* **Development**: Godot Editor + GDScript (not pure code approach)
+* **Blender Pipeline**: Assets imported via .blend, .gltf, or .glb (see Issue #6)
 * Assets will be developed in Blender and saved in Godot as well.
 * Confine documents to the ./specs folder unless strong reason not to
 * The general aesthetic is half cyberpunk, half solar punk

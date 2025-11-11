@@ -33,11 +33,18 @@ Beabodocl Godot is a VR/XR client for the [babocument](https://github.com/buddha
 
 ### Frontend (This Repository)
 - **Technology**: Godot Engine (version TBD - must support VR/XR well)
+- **Development Approach**: **Godot Editor + GDScript** (not pure code)
+- **Asset Creation**: **Blender-first workflow** (NOT procedural generation)
+  - All 3D models, rooms, panels created in Blender
+  - Materials and textures authored externally
+  - Import to Godot via .blend/.gltf/.glb (decision in Issue #6)
+  - Procedural generation only when absolutely necessary
+- **Scene Building**: Godot Editor for scene composition and layout
+- **Scripting**: GDScript for logic, interactions, API integration
 - **Platform Targets**: 
   - Meta Quest 2/3
   - Desktop (PCVR via SteamVR)
   - Potential: PSVR2, other OpenXR-compatible headsets
-- **Asset Pipeline**: Blender → Godot
 - **HTTP Client**: TBD (Godot HTTPRequest or plugin)
 
 ## Environment Design
@@ -268,6 +275,49 @@ var sources: Array  # Optional citations
 - [ ] Customizable environments
 
 ## Development Workflow
+
+### Asset-First Development Philosophy
+
+**CRITICAL: This project uses a Blender-first asset creation workflow**
+
+All 3D assets are created in Blender and imported to Godot. Procedural generation is avoided unless absolutely necessary for performance or dynamic content.
+
+**Why Blender-First:**
+1. **Artistic Control**: Precise control over aesthetics (cyberpunk-solarpunk hybrid)
+2. **Material Quality**: PBR materials authored with full texture control
+3. **Iteration Speed**: Faster to model/texture in Blender than code procedurally
+4. **Reusability**: Assets can be reused across scenes
+5. **Collaboration**: Artists can work in familiar tools
+6. **Quality**: Hand-crafted assets match the design vision better
+
+**What Gets Created in Blender:**
+- ✅ Hexagonal room geometry (walls, floor, ceiling)
+- ✅ Panel frames and backgrounds
+- ✅ Decorative elements (organic accents, tech details)
+- ✅ Furniture and environmental props
+- ✅ UI panel meshes
+- ✅ All textures and materials (PBR workflow)
+
+**What Might Be Procedural (Only If Necessary):**
+- ⚠️ Particle effects (bioluminescent motes, floating particles)
+- ⚠️ Shader effects (holographic display, scanlines)
+- ⚠️ Dynamic UI elements (text, scrolling, animations)
+
+**Godot Editor Usage:**
+- Scene composition and layout
+- Lighting and environment setup
+- XR camera and controller configuration
+- Node hierarchy organization
+- Script attachment and configuration
+- Testing and iteration
+
+**GDScript Usage:**
+- API client logic
+- User input handling
+- UI interactions
+- State management
+- Animation control
+- Performance optimization
 
 ### Version Control
 - **Main branch**: Stable, deployable builds

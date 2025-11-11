@@ -53,6 +53,8 @@ A **VR/XR client** built in Godot Engine that connects to the babocument FastAPI
 4. **Materials**: Transparent holographic displays + organic/industrial backgrounds
 5. **Target Hardware**: Meta Quest 2/3, desktop PCVR
 6. **Performance**: 90 FPS target
+7. **Asset Creation**: **Blender-first workflow** (NOT procedural generation) ⭐ CRITICAL
+8. **Development Approach**: **Godot Editor + GDScript** (scene-based, not pure code)
 
 ### Backend Integration
 
@@ -337,6 +339,8 @@ Each issue in GITHUB_ISSUES.md is ready to paste into GitHub:
 - Text readability at distance in VR
 - API request latency (keep UI responsive)
 - Motion sickness (grounded locomotion helps, but test thoroughly)
+- **Asset pipeline workflow** - establish early and document thoroughly
+- **Do NOT default to procedural generation** - use Blender for all 3D assets
 
 ### Next Handoff Should Include
 - Godot version decision rationale
