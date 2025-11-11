@@ -1,22 +1,58 @@
 # Handoff Document - Beabodocl Godot VR Client
 
 **Date**: November 10, 2025  
-**Session**: Initial Planning & Setup  
-**Status**: Ready for Phase 0 Implementation  
+**Session**: VR Configuration Complete  
+**Status**: Phase 0 - OpenXR Configured, VR Scene Ready  
 **Repository**: https://github.com/buddha314/beabodocl-godot
+
+---
+
+## Current Status
+
+✅ **Godot 4.5.1 Project Created** - Empty project committed to `client/` directory  
+✅ **OpenXR Configured** - Full Quest 3 VR settings enabled  
+✅ **VR Scene Created** - XROrigin3D with camera and controllers  
+✅ **Basic Environment Added** - Floor, lighting, and test geometry  
+
+### Phase 0 Progress: ~70% Complete
+
+**Completed:**
+- ✅ Godot version research (4.5.1 selected)
+- ✅ OpenXR investigation (built-in to core confirmed)
+- ✅ Project structure created (`client/` directory)
+- ✅ VR configuration in `project.godot`
+- ✅ Basic VR scene (`main.tscn`)
+- ✅ VR startup script (`vr_startup.gd`)
+- ✅ OpenXR action map (`openxr_action_map.tres`)
+
+**Remaining:**
+- ⬜ Test VR scene on Quest 3 hardware (requires deployment)
+- ⬜ Configure Android export for Quest 3
+- ⬜ Build and deploy test APK
+- ⬜ Verify 90 FPS performance
 
 ---
 
 ## Session Summary
 
-Successfully completed initial project planning for the Godot VR client for babocument. Reviewed project requirements, analyzed backend API, created comprehensive planning documents, and prepared GitHub issues for implementation.
+Successfully configured the Godot 4.5.1 project with complete OpenXR/VR support. The project now has a working VR scene structure ready for Quest 3 testing.
 
 ### Completed Tasks
 
-✅ **README Updated** - Added backend API reference and integration notes  
-✅ **PLAN.md Created** - Comprehensive project plan with phases, architecture, and roadmap  
-✅ **GITHUB_ISSUES.md Created** - 6 detailed issues ready for GitHub, totaling 46-64 hours of work  
-✅ **Issue Template Added** - `.github/ISSUE_TEMPLATE/feature.md`  
+✅ **Project Planning** - README, PLAN.md, GITHUB_ISSUES.md created  
+✅ **Godot 4.5.1 Project** - Empty project committed to `client/` directory  
+✅ **OpenXR Configuration** - Complete VR settings in `project.godot`:
+   - OpenXR enabled with Quest 3 optimizations
+   - Foveated rendering (level 3, dynamic)
+   - Depth buffer submission enabled
+   - Stage reference space configured
+✅ **VR Scene Structure** - `main.tscn` with:
+   - XROrigin3D root node
+   - XRCamera3D (1.7m height - standing VR)
+   - Left/Right XRController3D nodes
+   - Basic environment (floor, lighting)
+✅ **VR Startup Script** - `vr_startup.gd` initializes OpenXR interface
+✅ **Action Map** - `openxr_action_map.tres` created (ready for controller actions)  
 
 ### Documents Created
 
@@ -36,6 +72,48 @@ Successfully completed initial project planning for the Godot VR client for babo
    - Issue #6: Blender Asset Pipeline Decision
 
 3. **README.md** - Updated with backend integration info
+
+4. **VR Configuration** - Complete OpenXR setup in `client/` directory
+   - `project.godot` - OpenXR enabled with Quest 3 optimizations
+   - `main.tscn` - VR scene with XROrigin3D, camera, controllers
+   - `vr_startup.gd` - OpenXR initialization script
+   - `openxr_action_map.tres` - Controller action mapping
+
+---
+
+## VR Configuration Details
+
+### Project Settings (`client/project.godot`)
+
+**XR Settings:**
+- `openxr/enabled=true` - OpenXR interface active
+- `openxr/submit_depth_buffer=true` - Required for Quest 3 depth testing
+- `openxr/reference_space=1` - Stage space (standing VR)
+- `openxr/foveation_level=3` - Maximum foveated rendering
+- `openxr/foveation_dynamic=true` - Dynamic foveation for performance
+
+**Rendering:**
+- Renderer: Forward+ (Vulkan-based)
+- VRAM compression: ETC2/ASTC (required for Quest 3)
+
+### VR Scene Structure (`client/main.tscn`)
+
+```
+Main (Node3D) [with vr_startup.gd script]
+├─ XROrigin3D
+│  ├─ XRCamera3D (height: 1.7m standing)
+│  ├─ LeftHand (XRController3D)
+│  └─ RightHand (XRController3D)
+└─ Environment
+   ├─ DirectionalLight3D (sun)
+   ├─ Floor (10x10 mesh)
+   └─ WorldEnvironment
+```
+
+**VR Startup Script:**
+- Initializes OpenXR interface on `_ready()`
+- Enables XR viewport (`vp.use_xr = true`)
+- Error handling if OpenXR not available
 
 ---
 
@@ -74,24 +152,58 @@ Full API docs: http://localhost:8000/docs (when server running)
 
 ---
 
-## Immediate Next Steps (Phase 0)
+## Immediate Next Steps (Phase 0 Completion)
 
-### Priority 1: Critical Foundation (Required First)
+### Priority 1: Quest 3 Deployment & Testing
 
-**Issue #1: Godot Version Selection & VR/XR Setup** (5-7 hours)
-- Research Godot 4.x versions (4.2 LTS, 4.3, or latest)
-- Verify OpenXR support (built into Godot 4.x core - no plugin needed!)
-- Set up project structure
-- Test on Quest 3 hardware
-- Document setup process
+**Configure Android Export** (30-45 minutes)
+1. Open Godot project in `client/` directory
+2. Install Android build template (Editor → Manage Export Templates)
+3. Configure Android SDK/NDK paths (Editor → Editor Settings → Export → Android)
+4. Create Android export preset (Project → Export)
+   - Enable "Use Custom Build"
+   - Set package name: `org.buddha314.beabodocl`
+   - Enable "XR Features" → "OpenXR"
+   - Set min SDK: 29 (Android 10)
+   - Add Quest 3 permissions (see VR_SETUP.md)
+5. Test build locally (Project → Export → Export Project → Android APK)
 
-**Why First**: Everything depends on having a working VR project
+**Deploy to Quest 3** (15-30 minutes)
+1. Enable Developer Mode on Quest 3 (via Meta app on phone)
+2. Connect Quest 3 to PC via USB-C
+3. Allow USB debugging on headset
+4. Deploy via `adb install beabodocl.apk` OR
+5. Use Meta Quest Developer Hub for deployment
+6. Launch app on Quest 3 headset
 
-**Action**: Copy Issue #1 from GITHUB_ISSUES.md to GitHub and assign
+**Verify VR Scene** (15 minutes)
+1. Put on Quest 3 headset
+2. Launch beabodocl app
+3. Check VR scene loads correctly:
+   - Floor visible at correct height
+   - Controllers tracked and visible
+   - Head tracking working
+   - 90 FPS performance (use Quest Developer Hub to monitor)
+4. Test basic movement (if locomotion implemented)
+
+**Total Time**: 1-1.5 hours for first-time setup
 
 ---
 
-**Issue #6: Blender Asset Pipeline Decision** (2-4 hours)
+### Priority 2: HTTP API Client (After VR Verified)
+
+**Issue #2: HTTP API Client Implementation** (8-12 hours)
+**Issue #2: HTTP API Client Implementation** (8-12 hours)
+- Create HTTPRequest-based API client singleton
+- Implement GDScript data models (DocumentMetadata, ChatMessage, etc.)
+- Test all API endpoints
+- Add error handling and retry logic
+
+**Reference**: See VR_SETUP.md for complete Quest 3 deployment steps
+
+---
+
+### Priority 3: Asset Pipeline (After API Client)
 - Test .blend, .gltf, .glb export/import
 - Verify material preservation
 - Document workflow
@@ -294,9 +406,14 @@ Each issue in specs/GITHUB_ISSUES.md is ready to paste into GitHub:
 ## Success Metrics
 
 ### Phase 0 Complete When:
-- [ ] Godot 4.5.1 installed and documented
-- [ ] OpenXR working on Quest 3
-- [ ] Basic VR scene loads at 90 FPS
+- [x] Godot 4.5.1 installed and documented
+- [x] OpenXR configured in project settings
+- [x] Basic VR scene created with XROrigin3D
+- [x] VR startup script implemented
+- [ ] VR scene tested on Quest 3 hardware
+- [ ] Android export configured
+- [ ] Test APK deployed to Quest 3
+- [ ] Performance verified at 90 FPS
 - [ ] HTTP API client connects to babocument server
 - [ ] Can send chat message and receive response
 - [ ] Blender export workflow documented
@@ -405,7 +522,7 @@ With this foundation, future sessions can focus on implementation rather than pl
 
 ---
 
-**Status**: ✅ Ready for Phase 0 Implementation  
-**Next Action**: Install Godot 4.5.1 and begin Issue #1 implementation  
-**Document Version**: 2.0  
+**Status**: ✅ VR Scene Configured - Ready for Quest 3 Testing  
+**Next Action**: Configure Android export and deploy test APK to Quest 3  
+**Document Version**: 3.0  
 **Last Updated**: November 10, 2025
