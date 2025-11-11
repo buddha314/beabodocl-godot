@@ -33,6 +33,7 @@ For backend setup instructions, see: https://github.com/buddha314/babocument
 
 When preparing for a handoff:
 * Create a prioritized document of next steps
-* Create or update any needed github actions
-* Maintain good handoff hygience for next session
+* Create or update any needed github issues
+* Provide summary of time saved (agent hours vs human hours)
+* Maintain good handoff hygiene for next session
 * Push outstanding commits to main
