@@ -19,15 +19,54 @@ When creating any asset in Blender, model it with this orientation:
 - **Height/Vertical**: **+Y axis** (up/down in Blender, becomes Y-up in Godot)
 
 ### Visual Guide
+
+**In Blender (where you model):**
 ```
-      Y (Up)
+      Z (Up in Blender)
       |
       |
       +---- X (Width/Right)
      /
     /
-   Z (Forward, pointing toward you)
+   Y (Forward in Blender default)
 ```
+
+**For Godot Export (what we need):**
+```
+      Y (Up in Godot)
+      |
+      |
+      +---- X (Width/Right - same as Blender)
+     /
+    /
+   Z (Forward in Godot, -Z specifically)
+```
+
+**CRITICAL: Model with front face toward -Y in Blender**
+- When you export with "-Z Forward" setting, Blender's -Y becomes Godot's -Z
+- Your asset's front should face **toward you** when in **Front View (Numpad 1)** in Blender
+- This is the **-Y direction** in Blender's coordinate system
+
+### Using Blender's Orientation Widget
+
+**Top-right corner of 3D Viewport:**
+- The small axis gizmo shows X (red), Y (green), Z (blue)
+- When modeling, switch to **Front View (Numpad 1)**
+- The widget should show **-Y pointing toward you**
+- Your asset's front face should point in this direction
+
+**How to verify:**
+1. Press **Numpad 1** to enter Front View
+2. Look at orientation widget in top-right
+3. Widget should display **"-Y"** or the Y-axis (green) pointing toward you
+4. Model your asset so the **front face points toward you** (toward -Y)
+5. Width should span left-right (X-axis, red)
+6. Height should span up-down (Z-axis, blue, becomes Y in Godot)
+
+**Quick Check:**
+- Front view (Numpad 1) → Front of asset faces you → This is **-Y in Blender** → Becomes **-Z in Godot** ✅
+- Right view (Numpad 3) → Left side of asset faces you → Width along X-axis ✅
+- Top view (Numpad 7) → Top of asset faces you → Height along Z-axis ✅
 
 ### Why Z-Forward?
 
@@ -41,11 +80,24 @@ When creating any asset in Blender, model it with this orientation:
 
 In Blender, before exporting:
 
-1. Switch to **Front view** (Numpad 1)
-2. The **front face** of your asset should be facing you (-Z direction)
-3. Width should span **left-right** (X-axis)
-4. Height should span **up-down** (Y-axis)
-5. Apply all transforms: `Ctrl+A` → All Transforms
+1. Switch to **Front View**
+   - **With numpad**: Press `Numpad 1`
+   - **Without numpad**: Press `~` (tilde, top-left), then select "Front" from pie menu
+   - Or use **View menu → Viewpoint → Front**
+2. Check orientation widget (top-right): Should show **"-Y"** pointing toward you
+3. The **front face** of your asset should be facing you (**-Y direction in Blender**)
+4. Width should span **left-right** (X-axis, red in widget)
+5. Height should span **up-down** (Z-axis, blue in widget, becomes Y in Godot)
+6. **CRITICAL**: Apply all transforms to freeze position/rotation/scale
+   - Select the object
+   - Press `Ctrl+A` → Select **"All Transforms"**
+   - Or use **Object menu → Apply → All Transforms**
+   - This bakes rotation into the mesh geometry so it exports correctly
+
+**What the export does:**
+- Blender's **-Y** (front in Front View) → becomes Godot's **-Z** (forward)
+- Blender's **X** (width) → stays Godot's **X** (width)
+- Blender's **Z** (height) → becomes Godot's **Y** (height)
 
 ### Common Mistakes to Avoid
 
