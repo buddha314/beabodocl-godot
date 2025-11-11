@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://c8gs4ledvyyor"]
+[gd_scene load_steps=7 format=3 uid="uid://c8gs4ledvyyor"]
 
 [ext_resource type="Script" uid="uid://icc6mo0lnoj4" path="res://vr_startup.gd" id="1_startup"]
 [ext_resource type="PackedScene" uid="uid://b5d2xg3km218p" path="res://models/floor.glb" id="2_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://b8c6ejdgrref4" path="res://models/wall.glb" id="3_h2yge"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_floor"]
 size = Vector3(10, 0.1, 10)
@@ -43,3 +44,6 @@ environment = SubResource("Environment_ig7tw")
 
 [node name="floor" parent="Environment" instance=ExtResource("2_0xm2m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17151332, 0)
+
+[node name="wall" parent="Environment" instance=ExtResource("3_h2yge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.9376593, 1.4488254, -0.8689995)
