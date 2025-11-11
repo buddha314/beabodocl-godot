@@ -18,26 +18,28 @@ For backend setup instructions, see: https://github.com/buddha314/babocument
 
 ## Early Decisions
 
+* **Target Hardware**: Meta Quest 3 (standalone VR) - 90 FPS target
+* **Godot Version**: ✅ 4.5.1 Stable (latest, Oct 2025 - OpenXR built into core!)
 * **Asset Workflow**: Blender-first (NOT procedural generation) ⭐ CRITICAL
-* **Development Tools**: Godot Editor + GDScript (not pure code)
-* Which Godot Version to use that support VR/XR well.
-* Blender hand-off process. Save `.blend` or something else? (See Issue #6)
+* **Development Tools**: Godot Editor + GDScript (scene-based, not pure code)
+* **Blender Pipeline**: Decision pending (Issue #6) - .blend vs .gltf vs .glb
 
 ## General Notes
 
 * **Asset Creation**: All 3D assets developed in Blender, NOT procedurally generated
-* **Development**: Godot Editor + GDScript (not pure code approach)
-* **Blender Pipeline**: Assets imported via .blend, .gltf, or .glb (see Issue #6)
-* Assets will be developed in Blender and saved in Godot as well.
-* Confine documents to the ./specs folder unless strong reason not to
-* The general aesthetic is half cyberpunk, half solar punk
-* Examples in the lookbook directory also in specs/Visualization_requirements.md
+* **Development**: Godot Editor + GDScript (scene-based workflow)
+* **Blender Pipeline**: Assets imported via .blend, .gltf, or .glb (decision in Issue #6)
+* **VR Setup**: See `VR_SETUP.md` for complete Quest 3 configuration guide
+* **Documents**: Keep in `./specs` folder unless essential to root
+* **Aesthetic**: Hybrid cyberpunk-solarpunk (tech + nature, optimistic futurism)
+* **Visual References**: See `lookbook/` and `specs/INTERFACE_DESIGN.md`
 
 ## Agent Handoff
 
 When preparing for a handoff:
-* Create a prioritized document of next steps
-* Create or update any needed github issues
-* Provide summary of time saved (agent hours vs human hours)
-* Maintain good handoff hygiene for next session
+* Create prioritized next steps in `HANDOFF.md`
+* Update GitHub issues in `specs/GITHUB_ISSUES.md`
+* Provide time savings summary (agent vs human hours)
+* Maintain good handoff hygiene for continuity
 * Push outstanding commits to main
+* Keep detailed session notes in `specs/HANDOFF_SESSION_X.md`

@@ -42,7 +42,7 @@ Beabodocl Godot is a VR/XR client for the [babocument](https://github.com/buddha
 - **Scene Building**: Godot Editor for scene composition and layout
 - **Scripting**: GDScript for logic, interactions, API integration
 - **Platform Targets**: 
-  - Meta Quest 2/3
+  - Meta Quest 3 (standalone VR)
   - Desktop (PCVR via SteamVR)
   - Potential: PSVR2, other OpenXR-compatible headsets
 - **HTTP Client**: TBD (Godot HTTPRequest or plugin)
@@ -197,7 +197,7 @@ GET  /api/v1/stats                    # System statistics
 ```
 
 ### Performance Targets
-- **VR Frame Rate**: 90 FPS (Quest 2/3), 72 FPS minimum
+- **VR Frame Rate**: 90 FPS (Quest 3 target), 72 FPS minimum
 - **Desktop**: 60+ FPS
 - **Latency**: <100ms for API requests
 - **Text Rendering**: 24-26px for body text in VR
@@ -258,7 +258,7 @@ var sources: Array  # Optional citations
 - [ ] Working chat panel with AI agent responses
 - [ ] Grounded locomotion (standing, lateral only)
 - [ ] Basic materials applied
-- [ ] Deployable to Meta Quest 2/3
+- [ ] Deployable to Meta Quest 3
 - [ ] 90 FPS performance
 
 ### V1.0
@@ -328,7 +328,7 @@ All 3D assets are created in Blender and imported to Godot. Procedural generatio
 ### Testing Strategy
 1. **Unit Testing**: GDScript unit tests for API client, data models
 2. **Integration Testing**: Test full workflows (chat → backend → display)
-3. **VR Testing**: Regular testing on Quest 2/3 hardware
+3. **VR Testing**: Regular testing on Quest 3 hardware
 4. **Performance Profiling**: Monitor FPS, memory, draw calls
 
 ### Documentation

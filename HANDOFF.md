@@ -45,14 +45,14 @@ Successfully completed initial project planning for the Godot VR client for babo
 
 A **VR/XR client** built in Godot Engine that connects to the babocument FastAPI backend (https://github.com/buddha314/babocument). Users interact with an AI research assistant in an immersive hexagonal room with holographic displays.
 
-### Key Design Decisions
+**Key Design Decisions**
 
 1. **Aesthetic**: Hybrid cyberpunk-solarpunk (tech + nature, optimistic futurism)
 2. **Movement**: Grounded locomotion only (standing, lateral movement, no flying)
 3. **Environment**: Hexagonal room with 3 display panels (chat, documents, visualization)
 4. **Materials**: Transparent holographic displays + organic/industrial backgrounds
-5. **Target Hardware**: Meta Quest 2/3, desktop PCVR
-6. **Performance**: 90 FPS target
+5. **Target Hardware**: **Meta Quest 3** (standalone VR)
+6. **Performance**: 90 FPS target (72 FPS minimum)
 7. **Asset Creation**: **Blender-first workflow** (NOT procedural generation) ⭐ CRITICAL
 8. **Development Approach**: **Godot Editor + GDScript** (scene-based, not pure code)
 
@@ -78,11 +78,11 @@ Full API docs: http://localhost:8000/docs (when server running)
 
 ### Priority 1: Critical Foundation (Required First)
 
-**Issue #1: Godot Version Selection & VR/XR Setup** (6-8 hours)
+**Issue #1: Godot Version Selection & VR/XR Setup** (5-7 hours)
 - Research Godot 4.x versions (4.2 LTS, 4.3, or latest)
-- Test OpenXR plugin compatibility
+- Verify OpenXR support (built into Godot 4.x core - no plugin needed!)
 - Set up project structure
-- Test on Quest 2/3 hardware
+- Test on Quest 3 hardware
 - Document setup process
 
 **Why First**: Everything depends on having a working VR project
@@ -122,7 +122,7 @@ Full API docs: http://localhost:8000/docs (when server running)
 - Configure XR camera (locked at 1.6m height)
 - Implement grounded locomotion
 - Position 3 panels
-- Test on hardware
+- Test on Quest 3 hardware
 
 **Dependency**: Issue #1 must be complete
 
@@ -155,11 +155,11 @@ Full API docs: http://localhost:8000/docs (when server running)
 ### For Next Session
 
 1. **Start with Issue #1** - This is the foundation
-   - Open GITHUB_ISSUES.md
+   - Open specs/GITHUB_ISSUES.md
    - Copy "Issue #1: Godot Version Selection & VR/XR Setup" section
    - Create GitHub issue
-   - Research Godot versions
-   - Test OpenXR on Quest 2/3
+   - Install Godot 4.5.1
+   - Test OpenXR on Quest 3
 
 2. **Then Issue #6** - Asset pipeline
    - Test Blender export formats
@@ -172,7 +172,7 @@ Full API docs: http://localhost:8000/docs (when server running)
 
 ### Creating GitHub Issues
 
-Each issue in GITHUB_ISSUES.md is ready to paste into GitHub:
+Each issue in specs/GITHUB_ISSUES.md is ready to paste into GitHub:
 1. Go to https://github.com/buddha314/beabodocl-godot/issues/new
 2. Copy the issue section (including title, labels, tasks, etc.)
 3. Set labels: `P0` (phase 0), `foundation`, `vr`, etc.
@@ -192,9 +192,11 @@ Each issue in GITHUB_ISSUES.md is ready to paste into GitHub:
 
 ### Documentation (This Repo)
 - **PLAN.md** - Overall project plan
-- **GITHUB_ISSUES.md** - Detailed issues ready to create
+- **specs/GITHUB_ISSUES.md** - Detailed issues ready to create
 - **specs/INTERFACE_DESIGN.md** - Complete visual design specification
 - **specs/VISUALIZATION_REQUIREMENTS.md** - Data visualization needs
+- **specs/HANDOFF_SESSION_2.md** - Session 2 detailed notes
+- **VR_SETUP.md** - Quest 3 setup and configuration guide
 - **lookbook/** - Visual aesthetic references
 
 ### Backend (External)
@@ -219,9 +221,9 @@ Each issue in GITHUB_ISSUES.md is ready to paste into GitHub:
 ### Immediate (Phase 0)
 
 1. **Which Godot version?**
-   - Options: 4.2 LTS (stable), 4.3 (newer), 4.4+ (latest)
-   - Must verify OpenXR support and Quest 2/3 compatibility
-   - **Decision needed before Issue #1 complete**
+   - ✅ **DECIDED: Godot 4.5.1 Stable** (latest as of Oct 2025)
+   - OpenXR is built into core (no plugin!)
+   - Best Quest 3 support and latest improvements
 
 2. **Blender export format?**
    - Options: .blend (direct), .gltf (standard), .glb (binary)
@@ -292,8 +294,8 @@ Each issue in GITHUB_ISSUES.md is ready to paste into GitHub:
 ## Success Metrics
 
 ### Phase 0 Complete When:
-- [ ] Godot version selected and documented
-- [ ] OpenXR working on Quest 2/3
+- [ ] Godot 4.5.1 installed and documented
+- [ ] OpenXR working on Quest 3
 - [ ] Basic VR scene loads at 90 FPS
 - [ ] HTTP API client connects to babocument server
 - [ ] Can send chat message and receive response
@@ -303,15 +305,15 @@ Each issue in GITHUB_ISSUES.md is ready to paste into GitHub:
 - [ ] VR hexagonal room navigable
 - [ ] Chat panel displays AI responses
 - [ ] Grounded locomotion working
-- [ ] Performance: 90 FPS on Quest 2/3
-- [ ] Deployable to VR headset
+- [ ] Performance: 90 FPS on Quest 3
+- [ ] Deployable to Quest 3 headset
 
 ---
 
 ## Estimated Timeline
 
-**Phase 0 (Foundation)**: 16-24 hours (2-3 weeks part-time)
-- Issue #1: 6-8 hours
+**Phase 0 (Foundation)**: 13-22 hours (2-3 weeks part-time)
+- Issue #1: 5-7 hours (research complete, implementation pending)
 - Issue #2: 8-12 hours
 - Issue #6: 2-4 hours
 
@@ -322,7 +324,7 @@ Each issue in GITHUB_ISSUES.md is ready to paste into GitHub:
 - Issue #4: 10-14 hours
 - Issue #5: 8-10 hours
 
-**Total to MVP**: 46-64 hours (6-8 weeks part-time)
+**Total to MVP**: 41-58 hours (5-7 weeks part-time)
 
 ---
 
@@ -335,7 +337,7 @@ Each issue in GITHUB_ISSUES.md is ready to paste into GitHub:
 - Issue-driven development approach
 
 ### What to Watch Out For
-- VR performance on Quest 2/3 (90 FPS target is challenging)
+- VR performance on Quest 3 (90 FPS target, but Quest 3 is more powerful than Quest 2)
 - Text readability at distance in VR
 - API request latency (keep UI responsive)
 - Motion sickness (grounded locomotion helps, but test thoroughly)
@@ -404,6 +406,6 @@ With this foundation, future sessions can focus on implementation rather than pl
 ---
 
 **Status**: ✅ Ready for Phase 0 Implementation  
-**Next Action**: Create Issue #1 on GitHub and begin Godot version research  
-**Document Version**: 1.0  
+**Next Action**: Install Godot 4.5.1 and begin Issue #1 implementation  
+**Document Version**: 2.0  
 **Last Updated**: November 10, 2025
