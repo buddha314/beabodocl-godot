@@ -19,12 +19,29 @@ For backend setup instructions, see: https://github.com/buddha314/babocument
 ## Early Decisions
 
 * **Target Hardware**: Meta Quest 3 (standalone VR) - 90 FPS target
-* **Godot Version**: ✅ 4.5.1 Stable (latest, Oct 2025 - OpenXR built into core!)
-* **Asset Workflow**: Blender-first (NOT procedural generation) ⭐ CRITICAL
+* **Godot Version**: ✅ 4.5.1 Stable (OpenXR built into core!)
+* **Asset Workflow**: ✅ Blender-first (.glb export workflow established) ⭐ CRITICAL
 * **Development Tools**: Godot Editor + GDScript (scene-based, not pure code)
-* **Blender Pipeline**: Decision pending (Issue #6) - .blend vs .gltf vs .glb
+* **Blender Pipeline**: ✅ .glb export from Blender (avoid path configuration issues)
 
-## General Notes
+## Current Status
+
+**Phase 1 In Progress** - Core Environment (~60% complete)
+
+✅ **Completed:**
+- Godot 4.5.1 VR project with Quest 3 deployment working
+- HTTP API client fully implemented and tested
+- Hexagonal room environment (floor + 6 walls + 3 screens)
+- Blender asset pipeline established (.glb workflow)
+
+⏳ **In Progress:**
+- Add collision shapes to environment
+- Implement grounded locomotion (controller-based movement)
+- Panel interaction system (ray-casting from controllers)
+
+**Next:** Chat panel UI integration with API client
+
+---
 
 * **Asset Creation**: All 3D assets developed in Blender, NOT procedurally generated
 * **Development**: Godot Editor + GDScript (scene-based workflow)

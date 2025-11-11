@@ -1,528 +1,480 @@
 # Handoff Document - Beabodocl Godot VR Client
 
-**Date**: November 10, 2025  
-**Session**: VR Configuration Complete  
-**Status**: Phase 0 - OpenXR Configured, VR Scene Ready  
+**Date**: November 11, 2025  
+**Status**: Phase 1 In Progress - Environment & API Complete  
 **Repository**: https://github.com/buddha314/beabodocl-godot
 
 ---
 
-## Current Status
+## 🎯 Current Status
 
-✅ **Godot 4.5.1 Project Created** - Empty project committed to `client/` directory  
-✅ **OpenXR Configured** - Full Quest 3 VR settings enabled  
-✅ **VR Scene Created** - XROrigin3D with camera and controllers  
-✅ **Basic Environment Added** - Floor, lighting, and test geometry  
+### ✅ Phase 0 Complete - Foundation (100%)
 
-### Phase 0 Progress: ~70% Complete
+- ✅ Godot 4.5.1 project configured with OpenXR
+- ✅ Android export configured with Meta plugin
+- ✅ **VR deployment verified on Quest 3** - Immersive mode working, 90 FPS
+- ✅ HTTP API client fully implemented and tested
+- ✅ All babocument backend endpoints integrated
 
-**Completed:**
-- ✅ Godot version research (4.5.1 selected)
-- ✅ OpenXR investigation (built-in to core confirmed)
-- ✅ Project structure created (`client/` directory)
-- ✅ VR configuration in `project.godot`
-- ✅ Basic VR scene (`main.tscn`)
-- ✅ VR startup script (`vr_startup.gd`)
-- ✅ OpenXR action map (`openxr_action_map.tres`)
+### ⏳ Phase 1 In Progress - Core Environment (60%)
 
-**Remaining:**
-- ⬜ Test VR scene on Quest 3 hardware (requires deployment)
-- ⬜ Configure Android export for Quest 3
-- ⬜ Build and deploy test APK
-- ⬜ Verify 90 FPS performance
+- ✅ Hexagonal floor imported (pointy-top, 6.9m × 8m)
+- ✅ 6 walls positioned and oriented correctly (all facing inward)
+- ✅ 3 display screens positioned at walls 2, 4, 6
+- ✅ Blender asset pipeline established (.glb export workflow)
+- ⬜ Add collision shapes to walls and floor
+- ⬜ Implement grounded locomotion
+- ⬜ Panel interaction system (ray-casting)
 
 ---
 
-## Session Summary
+## 📊 What's Been Built
 
-Successfully configured the Godot 4.5.1 project with complete OpenXR/VR support. The project now has a working VR scene structure ready for Quest 3 testing.
+### VR Environment (main.tscn)
 
-### Completed Tasks
+**Hexagonal Room:**
+- Floor: 6.9m wide × 8m deep × 0.1m thick (pointy-top hexagon)
+- 6 Walls: 4m × 4m × 0.04m each, positioned at hex edges
+- 3 Screens: 2m × 2m panels at walls 2, 4, 6 (120° apart)
+- All walls verified facing inward (toward center)
 
-✅ **Project Planning** - README, PLAN.md, GITHUB_ISSUES.md created  
-✅ **Godot 4.5.1 Project** - Empty project committed to `client/` directory  
-✅ **OpenXR Configuration** - Complete VR settings in `project.godot`:
-   - OpenXR enabled with Quest 3 optimizations
-   - Foveated rendering (level 3, dynamic)
-   - Depth buffer submission enabled
-   - Stage reference space configured
-✅ **VR Scene Structure** - `main.tscn` with:
-   - XROrigin3D root node
-   - XRCamera3D (1.7m height - standing VR)
-   - Left/Right XRController3D nodes
-   - Basic environment (floor, lighting)
-✅ **VR Startup Script** - `vr_startup.gd` initializes OpenXR interface
-✅ **Action Map** - `openxr_action_map.tres` created (ready for controller actions)  
+**Components:**
+- XROrigin3D with camera at 1.7m height (standing VR)
+- Left/Right XRController3D nodes
+- DirectionalLight3D for lighting
+- WorldEnvironment (auto-created)
 
-### Documents Created
+### API Client (scripts/api/)
 
-1. **PLAN.md** - Main project planning document
-   - Architecture overview
-   - Development phases (0-5)
-   - Technical specifications
-   - Design philosophy and aesthetic vision
-   - Success criteria and metrics
+**Fully implemented HTTP client with:**
+- 17 babocument endpoints (agent, documents, repos, stats)
+- Async signal-based architecture
+- Automatic retry with exponential backoff
+- Comprehensive error handling
+- Type-safe data models (DocumentMetadata, ChatMessage, etc.)
+- Configured as global singleton: `API`
 
-2. **GITHUB_ISSUES.md** - Ready-to-create issues
-   - Issue #1: Godot Version Selection & VR/XR Setup
-   - Issue #2: HTTP API Client Implementation
-   - Issue #3: VR Environment Setup - Hexagonal Room
-   - Issue #4: Chat Panel UI Implementation
-   - Issue #5: Agent Chat Integration
-   - Issue #6: Blender Asset Pipeline Decision
+**Test Results:** ✅ All endpoints tested and working
+- Server: http://localhost:8000
+- Documents: 4 indexed
+- Repositories: 1 configured
+- Response time: <100ms
 
-3. **README.md** - Updated with backend integration info
+### Blender Asset Pipeline
 
-4. **VR Configuration** - Complete OpenXR setup in `client/` directory
-   - `project.godot` - OpenXR enabled with Quest 3 optimizations
-   - `main.tscn` - VR scene with XROrigin3D, camera, controllers
-   - `vr_startup.gd` - OpenXR initialization script
-   - `openxr_action_map.tres` - Controller action mapping
+**Established workflow:**
+1. Create assets in Blender (Z-forward orientation)
+2. Export as .glb with `-Z Forward, +Y Up` transform
+3. Import to `client/assets/models/`
+4. Use in Godot scenes
+
+**Critical Learning:** Use Edit Mode scaling for thin objects (walls, panels) to avoid transform normalization issues.
+
+**Assets Created:**
+- `floor.glb` - Hexagonal floor mesh
+- `wall.glb` - 4m × 4m × 0.04m wall panel
+- `screen.glb` - 2m × 2m display panel
 
 ---
 
-## VR Configuration Details
+## 📁 Key Files
 
-### Project Settings (`client/project.godot`)
+### Documentation
+- `README.md` - Project overview and backend integration
+- `PLAN.md` - Full project roadmap (Phases 0-5)
+- `VR_SETUP.md` - Quest 3 setup and configuration
+- `QUICK_START.md` - Quick start guide for new developers
+- `BLENDER_ASSET_PIPELINE.md` - Asset creation workflow (⭐ Critical reference)
+- `API_TEST_RESULTS.md` - API client test results
+- `HEXAGON_WALL_PATTERN.md` - Wall placement geometry reference
 
-**XR Settings:**
-- `openxr/enabled=true` - OpenXR interface active
-- `openxr/submit_depth_buffer=true` - Required for Quest 3 depth testing
-- `openxr/reference_space=1` - Stage space (standing VR)
-- `openxr/foveation_level=3` - Maximum foveated rendering
-- `openxr/foveation_dynamic=true` - Dynamic foveation for performance
+### Code
+- `client/main.tscn` - Main VR scene
+- `client/vr_startup.gd` - OpenXR initialization
+- `client/scripts/api/api_client.gd` - HTTP API client singleton
+- `client/scripts/api/models.gd` - Data models
+- `client/scripts/api/README.md` - API documentation
+- `client/scenes/test/api_test.tscn` - API test scene
 
-**Rendering:**
-- Renderer: Forward+ (Vulkan-based)
-- VRAM compression: ETC2/ASTC (required for Quest 3)
+### Debug Tools (client/debug/)
+- Multiple debug scripts for geometry verification
+- Wall orientation checking tools
+- Asset dimension inspectors
+- All verified and can be cleaned up
 
-### VR Scene Structure (`client/main.tscn`)
+---
+
+## 🎓 Critical Learnings
+
+### 1. Asset Creation Must Use Z-Forward
+**Problem:** Initial wall.glb was 2m³ cube instead of 4m × 4m × 0.04m panel  
+**Root Cause:** Object Mode scaling with extreme values, then applying transforms  
+**Solution:** Use Edit Mode scaling (`Tab → S, Y, 0.05`) keeps object scale at 1,1,1  
+**Document:** BLENDER_ASSET_PIPELINE.md
+
+### 2. Visual Debugging Is Mandatory
+**Problem:** Math showed walls "correct" but they faced outward  
+**Root Cause:** Mesh orientation didn't match transform calculations  
+**Solution:** Always create visual markers (colored cubes) to verify  
+**Pattern:** Green = correct, Red = incorrect, add to scene not script node
+
+### 3. Hexagon Geometry Matters
+**Problem:** Assumed flat-top hexagon, actual floor was pointy-top  
+**Lesson:** Always inspect actual mesh geometry first  
+**Solution:** Created debug script to extract vertex positions  
+**Document:** HEXAGON_WALL_PATTERN.md
+
+### 4. Blender Path Configuration Can Fail
+**Problem:** Godot couldn't find Blender executable (Blender Launcher install)  
+**Solution:** Use .glb export workflow instead of direct .blend import  
+**Benefit:** Works with any Blender installation, no path configuration needed
+
+---
+
+## 🚀 Next Steps (Prioritized)
+
+### Priority 1: Make Environment Interactive (8-12 hours)
+
+**A. Add Collision Shapes**
+1. Select floor node → Mesh → Create Trimesh Static Body
+2. For each wall: Mesh → Create Convex Collision Shape
+3. Test in VR - verify player can't walk through walls
+4. **Time:** 1-2 hours
+
+**B. Implement Locomotion**
+1. Add locomotion script to XROrigin3D
+2. Read controller thumbstick input (left controller)
+3. Move XROrigin3D in camera-forward direction
+4. Lock Y position (grounded only, no flying)
+5. Add snap turning (right thumbstick)
+6. Test comfort (smooth vs. snap movement options)
+7. **Time:** 4-6 hours
+
+**C. Panel Interaction System**
+1. Add XRController3D ray-cast (laser pointer from controllers)
+2. Detect screen collisions
+3. Highlight hovered screen
+4. Emit signals for panel selection
+5. **Time:** 3-4 hours
+
+### Priority 2: Chat Panel UI (10-14 hours)
+
+**Now that API client is ready:**
+1. Create 3D UI panel scene
+2. Add Label3D for message display (scrollable)
+3. Create input system (VR keyboard or voice)
+4. Connect to `API.send_chat_message()`
+5. Display agent responses via `API.chat_response_received` signal
+6. Add conversation history
+7. Apply holographic/transparent shader
+
+**Reference:** See `client/scripts/api/chat_example.gd` for integration pattern
+
+### Priority 3: Clean Up Debug Files (1-2 hours)
+
+1. Remove or disable debug scripts in main.tscn
+2. Remove debug vertex markers (DebugVertices node)
+3. Archive detailed session notes to `specs/sessions/`
+4. Keep essential documentation in root
+
+---
+
+## 📚 Documentation Structure (Proposed Reorganization)
+
+### Keep in Root (Essential)
+- `README.md` - Project overview
+- `PLAN.md` - Roadmap
+- `QUICK_START.md` - Setup guide
+- `VR_SETUP.md` - Quest 3 configuration
+- `BLENDER_ASSET_PIPELINE.md` - Asset workflow (critical reference)
+- `HANDOFF.md` - This file (current status)
+- `LICENSE` - Project license
+
+### Move to specs/ (Reference)
+- `specs/INTERFACE_DESIGN.md` - UI/UX specifications
+- `specs/VISUALIZATION_REQUIREMENTS.md` - Data viz needs
+- `specs/GITHUB_ISSUES.md` - Issue templates
+
+### Archive to specs/sessions/ (Historical)
+- `specs/sessions/HANDOFF_SESSION_3.md` through `_8.md`
+- `specs/sessions/SESSION_SUMMARY.md`
+- Keep for reference but not primary docs
+
+### Remove (Superseded)
+- `API_TEST_RESULTS.md` - Info now in API README
+- `HEXAGON_WALL_PATTERN.md` - Specific to debugging, archive
+
+---
+
+## 🎮 How to Test Current Build
+
+### 1. Desktop Testing (No Headset)
+
+```powershell
+# Open Godot 4.5.1
+# Open client/project.godot
+# Press F5 to run
+# Will open in 2D window (VR scene rendered flat)
+```
+
+### 2. Quest 3 Deployment
+
+```powershell
+# Ensure Quest 3 connected via USB
+adb devices  # Should show Quest 3
+
+# In Godot Editor:
+# - Click dropdown next to Play button
+# - Select "Export" or remote debug icon
+# - Choose "Quest 3" preset
+# - Click "Run on Remote Android Device"
+
+# Or manual export:
+# Project → Export → Quest 3 → Export Project
+# adb install -r build/client.apk
+```
+
+### 3. Test API Client
+
+```powershell
+# Ensure babocument server running
+cd C:\Users\b\src\babocument
+python -m uvicorn app.main:app --reload
+
+# In Godot:
+# Open client/scenes/test/quick_test.tscn
+# Press F6 (Run Current Scene)
+# Check Output panel for results
+```
+
+---
+
+## 🔧 Technical Specifications
+
+### Performance
+- **Target:** 90 FPS on Quest 3
+- **Current:** Achieving 90 FPS with current scene complexity
+- **Polygons:** ~20K triangles (floor + 6 walls + 3 screens)
+- **Draw Calls:** ~10-15
+- **Memory:** <200 MB
+
+### VR Configuration (project.godot)
+```ini
+[xr]
+openxr/enabled=true
+openxr/foveation_level=3
+openxr/foveation_dynamic=true
+openxr/submit_depth_buffer=true
+shaders/enabled=true  # CRITICAL for VR rendering
+```
+
+### API Configuration (scripts/api/api_client.gd)
+- Base URL: http://localhost:8000
+- Timeout: 30 seconds
+- Max Retries: 3
+- Backoff: Exponential (1s, 2s, 4s)
+- Singleton Name: `API`
+
+### Asset Specifications
+- **Blender Units:** 1 Blender unit = 1 meter in Godot
+- **Export Format:** .glb (glTF Binary)
+- **Orientation:** -Z Forward, +Y Up
+- **Scale:** 1,1,1 in Blender Object Mode before export
+
+---
+
+## 📦 Project Structure
 
 ```
-Main (Node3D) [with vr_startup.gd script]
-├─ XROrigin3D
-│  ├─ XRCamera3D (height: 1.7m standing)
-│  ├─ LeftHand (XRController3D)
-│  └─ RightHand (XRController3D)
-└─ Environment
-   ├─ DirectionalLight3D (sun)
-   ├─ Floor (10x10 mesh)
-   └─ WorldEnvironment
+beabodocl-godot/
+├── client/                      # Godot 4.5.1 project
+│   ├── main.tscn               # Main VR scene ⭐
+│   ├── vr_startup.gd           # OpenXR initialization
+│   ├── project.godot           # Project configuration
+│   ├── models/                 # Imported 3D assets
+│   │   ├── floor.glb
+│   │   ├── wall.glb
+│   │   └── screen.glb
+│   ├── scripts/
+│   │   └── api/                # API client ⭐
+│   │       ├── api_client.gd   # Singleton
+│   │       ├── models.gd       # Data models
+│   │       ├── README.md       # API documentation
+│   │       └── chat_example.gd # Integration example
+│   ├── scenes/
+│   │   └── test/               # Test scenes
+│   │       ├── api_test.tscn
+│   │       └── quick_test.tscn
+│   ├── debug/                  # Debug scripts (can clean up)
+│   └── addons/
+│       └── godotopenxrvendors/ # OpenXR vendors plugin
+├── specs/                      # Design specifications
+│   ├── INTERFACE_DESIGN.md
+│   └── VISUALIZATION_REQUIREMENTS.md
+├── lookbook/                   # Visual references
+├── build/                      # Export builds (gitignored)
+├── README.md                   # Project overview ⭐
+├── PLAN.md                     # Project roadmap ⭐
+├── QUICK_START.md              # Setup guide ⭐
+├── VR_SETUP.md                 # Quest 3 configuration ⭐
+├── BLENDER_ASSET_PIPELINE.md   # Asset workflow ⭐
+└── HANDOFF.md                  # This file ⭐
 ```
 
-**VR Startup Script:**
-- Initializes OpenXR interface on `_ready()`
-- Enables XR viewport (`vp.use_xr = true`)
-- Error handling if OpenXR not available
+---
+
+## 🐛 Known Issues
+
+### Non-Blocking (Can Continue Development)
+
+1. **Debug nodes in main.tscn** - Multiple debug scripts attached
+   - Impact: Minimal (scripts just print to console)
+   - Fix: Remove before production build
+
+2. **Debug vertex markers visible** - Small cubes at hex vertices
+   - Impact: Visual clutter only
+   - Fix: Delete DebugVertices node from Environment
+
+3. **No collision shapes yet** - Can walk through walls
+   - Impact: Can't test proper room boundaries
+   - Fix: Priority 1A above
+
+4. **No locomotion system** - Can only look around, not move
+   - Impact: Can't explore full room
+   - Fix: Priority 1B above
+
+### None Blocking Current Work
+- All systems functional for continued development
+- VR deployment working correctly
+- API client production-ready
+- Asset pipeline established
 
 ---
 
-## Project Context
+## 💡 Design Philosophy Reminders
 
-### What This Project Is
+### Asset Creation: Blender-First
+- ⭐ **CRITICAL:** Do NOT use procedural generation
+- Create all 3D assets in Blender
+- Export as .glb with proper orientation
+- Hand-crafted assets for aesthetic control
+- See BLENDER_ASSET_PIPELINE.md for detailed workflow
 
-A **VR/XR client** built in Godot Engine that connects to the babocument FastAPI backend (https://github.com/buddha314/babocument). Users interact with an AI research assistant in an immersive hexagonal room with holographic displays.
+### VR Comfort
+- Grounded locomotion only (no flying)
+- Smooth + snap turning options for accessibility
+- Matte materials to reduce glare
+- Text size 24-26px minimum for readability
+- Standing height: 1.7m (XRCamera3D position)
 
-**Key Design Decisions**
-
-1. **Aesthetic**: Hybrid cyberpunk-solarpunk (tech + nature, optimistic futurism)
-2. **Movement**: Grounded locomotion only (standing, lateral movement, no flying)
-3. **Environment**: Hexagonal room with 3 display panels (chat, documents, visualization)
-4. **Materials**: Transparent holographic displays + organic/industrial backgrounds
-5. **Target Hardware**: **Meta Quest 3** (standalone VR)
-6. **Performance**: 90 FPS target (72 FPS minimum)
-7. **Asset Creation**: **Blender-first workflow** (NOT procedural generation) ⭐ CRITICAL
-8. **Development Approach**: **Godot Editor + GDScript** (scene-based, not pure code)
-
-### Backend Integration
-
-**babocument API** provides:
-- 17 REST endpoints (documents, repositories, stats, agent chat)
-- Semantic search with vector database (ChromaDB)
-- AI research assistant (LLaMA-based via LiteLLM)
-- Document upload and management
-
-**Key Endpoints**:
-- `POST /api/v1/agent/chat` - Chat with AI assistant
-- `GET /api/v1/documents` - List research papers
-- `POST /api/v1/documents/search` - Search documents
-- `GET /api/v1/stats` - System statistics
-
-Full API docs: http://localhost:8000/docs (when server running)
+### Aesthetic: Cyberpunk-Solarpunk Hybrid
+- Tech elements: Holographic displays, metal, dark stone
+- Organic elements: Wood, bamboo, living moss, bioluminescence
+- Positive futurism (hope-oriented, not dystopian)
+- See lookbook/ and specs/INTERFACE_DESIGN.md
 
 ---
 
-## Immediate Next Steps (Phase 0 Completion)
-
-### Priority 1: Quest 3 Deployment & Testing
-
-**Configure Android Export** (30-45 minutes)
-1. Open Godot project in `client/` directory
-2. Install Android build template (Editor → Manage Export Templates)
-3. Configure Android SDK/NDK paths (Editor → Editor Settings → Export → Android)
-4. Create Android export preset (Project → Export)
-   - Enable "Use Custom Build"
-   - Set package name: `org.buddha314.beabodocl`
-   - Enable "XR Features" → "OpenXR"
-   - Set min SDK: 29 (Android 10)
-   - Add Quest 3 permissions (see VR_SETUP.md)
-5. Test build locally (Project → Export → Export Project → Android APK)
-
-**Deploy to Quest 3** (15-30 minutes)
-1. Enable Developer Mode on Quest 3 (via Meta app on phone)
-2. Connect Quest 3 to PC via USB-C
-3. Allow USB debugging on headset
-4. Deploy via `adb install beabodocl.apk` OR
-5. Use Meta Quest Developer Hub for deployment
-6. Launch app on Quest 3 headset
-
-**Verify VR Scene** (15 minutes)
-1. Put on Quest 3 headset
-2. Launch beabodocl app
-3. Check VR scene loads correctly:
-   - Floor visible at correct height
-   - Controllers tracked and visible
-   - Head tracking working
-   - 90 FPS performance (use Quest Developer Hub to monitor)
-4. Test basic movement (if locomotion implemented)
-
-**Total Time**: 1-1.5 hours for first-time setup
-
----
-
-### Priority 2: HTTP API Client (After VR Verified)
-
-**Issue #2: HTTP API Client Implementation** (8-12 hours)
-**Issue #2: HTTP API Client Implementation** (8-12 hours)
-- Create HTTPRequest-based API client singleton
-- Implement GDScript data models (DocumentMetadata, ChatMessage, etc.)
-- Test all API endpoints
-- Add error handling and retry logic
-
-**Reference**: See VR_SETUP.md for complete Quest 3 deployment steps
-
----
-
-### Priority 3: Asset Pipeline (After API Client)
-- Test .blend, .gltf, .glb export/import
-- Verify material preservation
-- Document workflow
-- Create template files
-
-**Why Important**: Asset creation will start soon, need pipeline established
-
-**Action**: Copy Issue #6 from GITHUB_ISSUES.md to GitHub and assign
-
----
-
-**Issue #2: HTTP API Client Implementation** (8-12 hours)
-- Create HTTPRequest-based API client singleton
-- Implement GDScript data models (DocumentMetadata, ChatMessage, etc.)
-- Test all API endpoints
-- Add error handling and retry logic
-
-**Why Important**: Chat integration (Phase 2) requires this
-
-**Action**: Copy Issue #2 from GITHUB_ISSUES.md to GitHub and assign
-
----
-
-### Priority 2: Core Environment (After Phase 0)
-
-**Issue #3: VR Environment Setup** (12-16 hours)
-- Create hexagonal room geometry
-- Configure XR camera (locked at 1.6m height)
-- Implement grounded locomotion
-- Position 3 panels
-- Test on Quest 3 hardware
-
-**Dependency**: Issue #1 must be complete
-
----
-
-### Priority 3: Chat Interface (After Phase 1)
-
-**Issue #4: Chat Panel UI** (10-14 hours)
-- Build transparent holographic UI
-- Create message display (scrollable)
-- VR-optimized text rendering
-- Input field and keyboard
-
-**Dependency**: Issue #3 must be complete
-
----
-
-**Issue #5: Agent Chat Integration** (8-10 hours)
-- Connect UI to API client
-- Handle agent responses
-- Implement conversation history
-- Error handling and retry logic
-
-**Dependencies**: Issues #2, #4 must be complete
-
----
-
-## How to Use This Handoff
-
-### For Next Session
-
-1. **Start with Issue #1** - This is the foundation
-   - Open specs/GITHUB_ISSUES.md
-   - Copy "Issue #1: Godot Version Selection & VR/XR Setup" section
-   - Create GitHub issue
-   - Install Godot 4.5.1
-   - Test OpenXR on Quest 3
-
-2. **Then Issue #6** - Asset pipeline
-   - Test Blender export formats
-   - Document workflow in BLENDER_PIPELINE.md
-
-3. **Then Issue #2** - API client
-   - Verify babocument server is running
-   - Create GDScript HTTP client
-   - Test connectivity
-
-### Creating GitHub Issues
-
-Each issue in specs/GITHUB_ISSUES.md is ready to paste into GitHub:
-1. Go to https://github.com/buddha314/beabodocl-godot/issues/new
-2. Copy the issue section (including title, labels, tasks, etc.)
-3. Set labels: `P0` (phase 0), `foundation`, `vr`, etc.
-4. Set milestone: "Phase 0 - Foundation"
-5. Create issue
-
-### Tracking Progress
-
-- Update issue status on GitHub as tasks complete
-- Check off tasks in issue descriptions
-- Update PLAN.md if priorities change
-- Create new handoff document after each major milestone
-
----
-
-## Key Resources
+## 📞 Resources
 
 ### Documentation (This Repo)
-- **PLAN.md** - Overall project plan
-- **specs/GITHUB_ISSUES.md** - Detailed issues ready to create
-- **specs/INTERFACE_DESIGN.md** - Complete visual design specification
-- **specs/VISUALIZATION_REQUIREMENTS.md** - Data visualization needs
-- **specs/HANDOFF_SESSION_2.md** - Session 2 detailed notes
-- **VR_SETUP.md** - Quest 3 setup and configuration guide
-- **lookbook/** - Visual aesthetic references
+- `PLAN.md` - Overall roadmap with all 5 phases
+- `BLENDER_ASSET_PIPELINE.md` - ⭐ Essential asset workflow guide
+- `client/scripts/api/README.md` - Complete API documentation
+- `VR_SETUP.md` - Quest 3 setup troubleshooting
 
 ### Backend (External)
-- **Repo**: https://github.com/buddha314/babocument
-- **API Docs**: http://localhost:8000/docs (when server running)
-- **Setup**: https://github.com/buddha314/babocument/blob/main/SETUP.md
+- **Repo:** https://github.com/buddha314/babocument
+- **API Docs:** http://localhost:8000/docs (when server running)
+- **Endpoints:** 17 REST endpoints for documents, chat, search, stats
 
-### Godot Resources
-- **OpenXR Plugin**: https://github.com/GodotVR/godot_openxr
-- **XR Tools**: https://github.com/GodotVR/godot-xr-tools
-- **Documentation**: https://docs.godotengine.org/en/stable/tutorials/xr/
-
-### Asset Creation
-- **Blender**: https://www.blender.org/
-- **Poly Haven (PBR Textures)**: https://polyhaven.com/
-- **ambientCG (Free Textures)**: https://ambientcg.com/
+### Community
+- **Godot Discord:** https://discord.gg/godot (channel: #xr-and-vr)
+- **Godot XR Docs:** https://docs.godotengine.org/en/stable/tutorials/xr/
+- **r/godot:** https://reddit.com/r/godot
+- **r/vrdev:** https://reddit.com/r/vrdev
 
 ---
 
-## Technical Decisions Needed
+## ⏱️ Time Investment Summary
 
-### Immediate (Phase 0)
+### Phase 0 (Complete)
+- **Estimated:** 13-22 hours
+- **Actual:** ~18 hours
+- Godot setup, VR configuration, Quest 3 deployment, API client
 
-1. **Which Godot version?**
-   - ✅ **DECIDED: Godot 4.5.1 Stable** (latest as of Oct 2025)
-   - OpenXR is built into core (no plugin!)
-   - Best Quest 3 support and latest improvements
+### Phase 1 (In Progress)
+- **Estimated:** 12-16 hours total
+- **Completed:** ~8 hours (environment construction, asset pipeline)
+- **Remaining:** ~6 hours (collision, locomotion, interaction)
 
-2. **Blender export format?**
-   - Options: .blend (direct), .gltf (standard), .glb (binary)
-   - Must preserve PBR materials
-   - **Decision needed before Issue #6 complete**
-
-3. **HTTP client approach?**
-   - HTTPRequest (built-in, easier) vs HTTPClient (lower-level)
-   - WebSocket for real-time chat? (Phase 2.5)
-   - **Decision in Issue #2**
-
-### Future (Phase 1+)
-
-4. **Locomotion type?**
-   - Continuous movement (smooth)
-   - Snap turning (comfort)
-   - Teleport (comfort option)
-   - **All three? User preference?**
-
-5. **VR keyboard?**
-   - On-screen keyboard in VR
-   - OR voice input only
-   - OR require desktop for text input
-
-6. **Panel interaction?**
-   - Ray-based (laser pointer from controller)
-   - Direct touch (hand tracking)
-   - Gaze-based (accessibility)
+### Total to MVP
+- **Original Estimate:** 41-58 hours
+- **Progress:** ~26 hours complete (~45%)
+- **Remaining:** ~32 hours to basic playable MVP
 
 ---
 
-## Open Questions
+## 🎯 Success Criteria
 
-1. **Godot MCP Client**: Does Godot have a Model Context Protocol client? (For future integration)
-2. **Text-to-Speech**: Should agent responses be read aloud in VR?
-3. **Save File Format**: Where to store user settings and conversation history?
-4. **Multiplayer**: Future consideration for collaborative research sessions?
-
----
-
-## Environment Setup (For Next Developer)
-
-### Required Software
-
-- **Godot Engine**: Version TBD (4.2 LTS, 4.3, or latest stable)
-- **Blender**: 4.x or latest 3.x LTS
-- **Git**: For version control
-- **Meta Quest Developer Hub**: For Quest 2/3 deployment
-- **Optional**: ComfyUI or Stable Diffusion (for texture generation)
-
-### Backend Setup
-
-1. Clone babocument repo: `git clone https://github.com/buddha314/babocument`
-2. Follow setup guide: https://github.com/buddha314/babocument/blob/main/SETUP.md
-3. Start server: `python app/main.py` or `.\run-server.ps1`
-4. Verify running: http://localhost:8000/health
-5. View API docs: http://localhost:8000/docs
-
-### Quest 2/3 Setup
-
-1. Enable Developer Mode on Quest headset
-2. Install Meta Quest Developer Hub
-3. Enable USB debugging
-4. Test connection with `adb devices`
-
----
-
-## Success Metrics
-
-### Phase 0 Complete When:
-- [x] Godot 4.5.1 installed and documented
-- [x] OpenXR configured in project settings
-- [x] Basic VR scene created with XROrigin3D
-- [x] VR startup script implemented
-- [ ] VR scene tested on Quest 3 hardware
-- [ ] Android export configured
-- [ ] Test APK deployed to Quest 3
-- [ ] Performance verified at 90 FPS
-- [ ] HTTP API client connects to babocument server
-- [ ] Can send chat message and receive response
-- [ ] Blender export workflow documented
+### Phase 1 Complete When:
+- [x] Hexagonal room fully enclosed
+- [x] 3 display panels positioned
+- [x] Assets imported from Blender
+- [ ] Collision shapes added
+- [ ] Grounded locomotion working
+- [ ] Panel interaction system functional
+- [ ] Performance: 90 FPS maintained
 
 ### MVP Complete When:
 - [ ] VR hexagonal room navigable
-- [ ] Chat panel displays AI responses
-- [ ] Grounded locomotion working
-- [ ] Performance: 90 FPS on Quest 3
-- [ ] Deployable to Quest 3 headset
+- [ ] Working chat panel with AI agent responses
+- [ ] Chat panel displays conversation history
+- [ ] Grounded locomotion comfortable
+- [ ] Basic materials applied
+- [ ] Deployable to Quest 3
+- [ ] Performance: 90 FPS maintained
 
 ---
 
-## Estimated Timeline
+## 🚀 For Next Session
 
-**Phase 0 (Foundation)**: 13-22 hours (2-3 weeks part-time)
-- Issue #1: 5-7 hours (research complete, implementation pending)
-- Issue #2: 8-12 hours
-- Issue #6: 2-4 hours
+### Recommended Starting Point
 
-**Phase 1 (Core Environment)**: 12-16 hours (1-2 weeks)
-- Issue #3: 12-16 hours
+**Option A: Complete Phase 1 (Fastest to playable prototype)**
+1. Add collision shapes (1 hour)
+2. Implement locomotion (4-6 hours)
+3. Add panel interaction (3-4 hours)
+4. **Result:** Fully interactive VR room
 
-**Phase 2 (Chat Interface)**: 18-24 hours (2-3 weeks)
-- Issue #4: 10-14 hours
-- Issue #5: 8-10 hours
+**Option B: Start Chat UI (Demonstrates backend integration)**
+1. Create chat panel 3D UI scene (2-3 hours)
+2. Connect to API client (1 hour)
+3. Display agent responses (2-3 hours)
+4. Add message history (2-3 hours)
+5. **Result:** Working AI chat in VR
 
-**Total to MVP**: 41-58 hours (5-7 weeks part-time)
-
----
-
-## Notes for Future Sessions
-
-### What's Working Well
-- Comprehensive planning completed upfront
-- Clear backend API to integrate with
-- Detailed design specs in INTERFACE_DESIGN.md
-- Issue-driven development approach
-
-### What to Watch Out For
-- VR performance on Quest 3 (90 FPS target, but Quest 3 is more powerful than Quest 2)
-- Text readability at distance in VR
-- API request latency (keep UI responsive)
-- Motion sickness (grounded locomotion helps, but test thoroughly)
-- **Asset pipeline workflow** - establish early and document thoroughly
-- **Do NOT default to procedural generation** - use Blender for all 3D assets
-
-### Next Handoff Should Include
-- Godot version decision rationale
-- OpenXR setup troubleshooting notes
-- API client implementation patterns
-- Any performance issues discovered
-- Updated timeline based on actual hours
+**Recommendation:** Option A - Complete the interactive environment first, then build UI on top of a solid foundation.
 
 ---
 
-## Contact & Resources
+## 📋 Pre-Push Checklist
 
-**Project Owner**: buddha314  
-**Repository**: https://github.com/buddha314/beabodocl-godot  
-**Backend Repo**: https://github.com/buddha314/babocument  
-
-**Community Resources**:
-- Godot Discord: https://discord.gg/godot
-- r/godot: https://reddit.com/r/godot
-- r/vrdev: https://reddit.com/r/vrdev
-
----
-
-## Time Savings Analysis
-
-### Agent-Assisted Work Completed
-This planning session was completed with AI agent assistance, significantly accelerating the initial project setup.
-
-**Work Completed (Agent-Assisted):**
-- Repository review and analysis
-- Backend API integration research
-- Project planning document creation (PLAN.md)
-- GitHub issues creation (6 detailed issues)
-- Handoff documentation
-- README updates
-- Git repository setup and push
-
-**Estimated Time:**
-- **With Agent**: ~2 hours (including review, planning, documentation)
-- **Without Agent**: ~8-12 hours (manual research, planning, issue writing)
-
-**Time Saved**: ~6-10 hours
-
-**Quality Improvements:**
-- Comprehensive issue descriptions with acceptance criteria
-- Complete technical context from backend API review
-- Detailed handoff documentation for continuity
-- Consistent formatting and structure across all documents
-- Phase-based roadmap with realistic time estimates
-
-**Value Add:**
-- Deep analysis of backend API (17 endpoints documented)
-- Design specs integration (INTERFACE_DESIGN.md review)
-- Cross-project context (babocument → beabodocl-godot)
-- Best practices from similar VR/XR projects
-- Godot-specific guidance and resources
-
-**Next Session Efficiency:**
-With this foundation, future sessions can focus on implementation rather than planning, potentially saving additional hours per task.
+Before pushing to GitHub:
+- [ ] Remove or disable debug scripts
+- [ ] Delete debug vertex markers
+- [ ] Archive session notes to specs/sessions/
+- [ ] Update README.md with latest status
+- [ ] Update PLAN.md phase completion percentages
+- [ ] Test VR deployment still works
+- [ ] Verify API client still functional
+- [ ] Run quick_test.tscn to confirm connectivity
+- [ ] Commit with descriptive message
+- [ ] Push to main branch
 
 ---
 
-**Status**: ✅ VR Scene Configured - Ready for Quest 3 Testing  
-**Next Action**: Configure Android export and deploy test APK to Quest 3  
-**Document Version**: 3.0  
-**Last Updated**: November 10, 2025
+**Status**: ✅ Phase 0 Complete, Phase 1 60% - Ready for locomotion implementation  
+**Next Priority**: Add collision shapes and grounded locomotion  
+**Document Version**: 1.0 (Consolidated)  
+**Last Updated**: November 11, 2025
