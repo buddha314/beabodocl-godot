@@ -1,8 +1,61 @@
 # Blender Asset Pipeline - Beabodocl Godot
 
-**Version**: 1.0  
-**Date**: November 10, 2025  
+**Version**: 1.1  
+**Date**: November 11, 2025  
 **Status**: Established Pipeline for Phase 1+
+
+---
+
+## 🔴 CRITICAL: Asset Orientation Standard
+
+**All Blender assets MUST follow Z-Forward (Godot-Aligned) convention**
+
+### Blender Modeling Requirements
+
+When creating any asset in Blender, model it with this orientation:
+
+- **Forward face**: **-Z axis** (pointing toward you in Front view, Numpad 1)
+- **Width/Horizontal**: **+X axis** (left/right)
+- **Height/Vertical**: **+Y axis** (up/down in Blender, becomes Y-up in Godot)
+
+### Visual Guide
+```
+      Y (Up)
+      |
+      |
+      +---- X (Width/Right)
+     /
+    /
+   Z (Forward, pointing toward you)
+```
+
+### Why Z-Forward?
+
+1. ✅ **Matches Godot's coordinate system** (-Z is forward in Godot)
+2. ✅ **Eliminates rotation translation** (no 90° offset needed)
+3. ✅ **Simplifies positioning code** (predictable rotations)
+4. ✅ **Industry standard** (Unity, Unreal also use Z-forward)
+5. ✅ **Easier debugging** (what you see in Blender matches Godot)
+
+### Verification Before Export
+
+In Blender, before exporting:
+
+1. Switch to **Front view** (Numpad 1)
+2. The **front face** of your asset should be facing you (-Z direction)
+3. Width should span **left-right** (X-axis)
+4. Height should span **up-down** (Y-axis)
+5. Apply all transforms: `Ctrl+A` → All Transforms
+
+### Common Mistakes to Avoid
+
+❌ **WRONG**: Modeling wide along Y-axis (Blender default habit)  
+❌ **WRONG**: Using +Z forward instead of -Z  
+❌ **WRONG**: Forgetting to apply rotation before export
+
+✅ **CORRECT**: Model front-facing in Front view (-Z)  
+✅ **CORRECT**: Width along X-axis  
+✅ **CORRECT**: Apply all transforms (Ctrl+A) before export
 
 ---
 
@@ -168,7 +221,9 @@ client/assets/textures/
      - Single file
      - Smaller, faster loading
    - Include: Selected Objects (or check what you need)
-   - Transform: **+Y Up** (Godot uses Y-up coordinate system)
+   - Transform: 
+     - **Forward**: **-Z Forward** ⚠️ CRITICAL
+     - **Up**: **+Y Up**
    - Data: 
      - ✓ Mesh
      - ✓ Materials

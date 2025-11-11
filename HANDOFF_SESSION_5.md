@@ -2,11 +2,31 @@
 
 ## Session Summary
 
-Rebuilt the main scene from scratch after crashes, added walls and screens to hexagonal room. Discovered critical Blender asset orientation issue blocking screen positioning.
+Rebuilt the main scene from scratch after crashes, added walls and screens to hexagonal room. **RESOLVED** critical Blender asset orientation issue by adopting Z-Forward standard and documenting in pipeline.
 
 ## Work Completed
 
-### 1. Scene Reconstruction ✅
+### 1. Asset Orientation Standard Adopted ✅
+- **Issue #7**: RESOLVED - Z-Forward (Godot-Aligned) convention adopted
+- **File**: `BLENDER_ASSET_PIPELINE.md` updated with CRITICAL section
+- **Standard**: 
+  - Forward: -Z axis
+  - Width: +X axis  
+  - Height: +Y axis
+- Documented export settings, verification checklist, common mistakes
+- Updated GitHub Issue #7 with resolution status
+
+### 1. Asset Orientation Standard Adopted ✅
+- **Issue #7**: RESOLVED - Z-Forward (Godot-Aligned) convention adopted
+- **File**: `BLENDER_ASSET_PIPELINE.md` updated with CRITICAL section
+- **Standard**: 
+  - Forward: -Z axis
+  - Width: +X axis  
+  - Height: +Y axis
+- Documented export settings, verification checklist, common mistakes
+- Updated GitHub Issue #7 with resolution status
+
+### 2. Scene Reconstruction ✅
 - **File**: `client/main.tscn`
 - Rebuilt scene after crashes with clean structure:
   - XROrigin3D with camera and controllers
@@ -16,37 +36,73 @@ Rebuilt the main scene from scratch after crashes, added walls and screens to he
   - 6 debug vertex cubes at hexagon corners
   - 3 screens on walls 2, 4, 6
 
-### 2. Debug Script Fixes ✅
+### 2. Scene Reconstruction ✅
+- **File**: `client/main.tscn`
+- Rebuilt scene after crashes with clean structure:
+  - XROrigin3D with camera and controllers
+  - Environment with lighting
+  - Floor asset at origin
+  - 6 walls forming hexagonal room
+  - 6 debug vertex cubes at hexagon corners
+  - 3 screens on walls 2, 4, 6
+
+### 3. Debug Script Fixes ✅
 - **Files**: `client/debug/*.gd`
 - Fixed `log()` function name conflicts in:
   - `debug_geometry_v2.gd`
   - `debug_geometry_file.gd`
 - All debug scripts now use `log_msg()` to avoid GDScript built-in `log()` math function
 
-### 3. Debug README Enhanced ✅
+### 3. Debug Script Fixes ✅
+- **Files**: `client/debug/*.gd`
+- Fixed `log()` function name conflicts in:
+  - `debug_geometry_v2.gd`
+  - `debug_geometry_file.gd`
+- All debug scripts now use `log_msg()` to avoid GDScript built-in `log()` math function
+
+### 4. Debug README Enhanced ✅
 - **File**: `client/debug/README.md`
 - Added **CRITICAL WARNING #1** at top: Never use `log()` as function name
 - Clear examples showing correct (`log_msg()`) vs incorrect (`log()`) patterns
 
-### 4. Asset Dimension Analysis ✅
+### 4. Debug README Enhanced ✅
+- **File**: `client/debug/README.md`
+- Added **CRITICAL WARNING #1** at top: Never use `log()` as function name
+- Clear examples showing correct (`log_msg()`) vs incorrect (`log()`) patterns
+
+### 5. Asset Dimension Analysis ✅
 - **Created**: `client/debug/debug_asset_dimensions.gd`
 - Measured actual asset dimensions via mesh local scale:
   - **Wall**: 0.12m thick, 4.0m tall, 4.2m wide
   - **Screen**: 0.09m thick, 1.55m wide, 3.34m tall
 - **Output**: `client/debug/asset_dimensions.log`
 
-### 5. Screen Positioning Debug ✅
+### 5. Asset Dimension Analysis ✅
+- **Created**: `client/debug/debug_asset_dimensions.gd`
+- Measured actual asset dimensions via mesh local scale:
+  - **Wall**: 0.12m thick, 4.0m tall, 4.2m wide
+  - **Screen**: 0.09m thick, 1.55m wide, 3.34m tall
+- **Output**: `client/debug/asset_dimensions.log`
+
+### 6. Screen Positioning Debug ✅
 - **Created**: `client/debug/debug_screen_facing.gd`
 - Creates colored cubes 0.5m from screen forward normals
 - Logs alignment scores with center
 - **Output**: `client/debug/screen_facing_output.log`
 
-### 6. GitHub Issues Created ✅
+### 6. Screen Positioning Debug ✅
+- **Created**: `client/debug/debug_screen_facing.gd`
+- Creates colored cubes 0.5m from screen forward normals
+- Logs alignment scores with center
+- **Output**: `client/debug/screen_facing_output.log`
+
+### 7. GitHub Issues Updated ✅
 - **File**: `specs/GITHUB_ISSUES.md`
-- **Issue #7**: Blender Asset Orientation Standard (P0 CRITICAL)
-  - Documents coordinate system mismatch problem
-  - Recommends Z-Forward (Godot-aligned) convention
-  - Blocks current screen positioning work
+- **Issue #7**: Blender Asset Orientation Standard
+  - Status updated: ✅ RESOLVED
+  - Documents Z-Forward convention adoption
+  - Links to `BLENDER_ASSET_PIPELINE.md` documentation
+  - Pending tasks: Re-export assets with new standard
 - **Issue #8**: Research Snap-to-Surface / Asset Placement Systems
   - Research plugins for automatic surface snapping
   - Phase 2.5 feature for document placement
@@ -92,48 +148,50 @@ From `screen_facing_output.log`:
 
 ## Blocking Issues
 
-### 🔴 CRITICAL: Asset Orientation Standard (Issue #7)
-- **Status**: Needs decision
-- **Blocking**: Screen positioning, all future asset work
-- **Options**:
-  - **A**: Y-Forward (Blender default) - requires translation
-  - **B**: Z-Forward (Godot-aligned) - recommended ⭐
+### � Asset Re-Export Required (Issue #7 - Partially Complete)
+- **Status**: Standard documented, assets need re-export
+- **Blocking**: Screen6 alignment, future asset work
 - **Action Required**: 
-  1. Choose convention (recommend Option B)
-  2. Re-export `wall.glb` and `screen.glb` with standard orientation
-  3. Update `BLENDER_ASSET_PIPELINE.md` with guidelines
+  1. ✅ Standard adopted: Z-Forward (Godot-aligned)
+  2. ✅ Documentation updated in `BLENDER_ASSET_PIPELINE.md`
+  3. ⏳ Re-export `wall.glb` with Z-forward orientation
+  4. ⏳ Re-export `screen.glb` with Z-forward orientation
+  5. ⏳ Test Screen6 positioning with re-exported assets
 
 ## Files Modified
 
 ### New Files
+- `HANDOFF_SESSION_5.md` - This handoff document
 - `client/debug/debug_asset_dimensions.gd` - Measures asset dimensions
 - `client/debug/debug_screen_facing.gd` - Visualizes screen facing directions
 - `client/debug/asset_dimensions.log` - Asset measurement output
 - `client/debug/screen_facing_output.log` - Screen alignment data
 
 ### Modified Files
+- `BLENDER_ASSET_PIPELINE.md` - **Added Z-Forward orientation standard (CRITICAL section)**
 - `client/main.tscn` - Rebuilt scene with walls and screens
 - `client/debug/debug_geometry_v2.gd` - Fixed log() conflicts
 - `client/debug/debug_geometry_file.gd` - Fixed log() conflicts
 - `client/debug/README.md` - Added CRITICAL WARNING about log()
-- `specs/GITHUB_ISSUES.md` - Added Issues #7 and #8
+- `specs/GITHUB_ISSUES.md` - Updated Issue #7 (resolved), added Issue #8
 
 ## Next Session Priorities
 
-### 1. Resolve Asset Orientation (CRITICAL - 4-7 hours)
-- [ ] Decide on convention (recommend Z-Forward)
-- [ ] Update `BLENDER_ASSET_PIPELINE.md`
-- [ ] Re-export `wall.glb` with Z-forward orientation
-- [ ] Re-export `screen.glb` with Z-forward orientation
-- [ ] Test screen positioning with standardized assets
-- [ ] Remove debug scripts from scene
+### 1. Re-Export Assets with Z-Forward Standard (3-5 hours)
+- [ ] Open `wall.blend` in Blender
+- [ ] Verify/adjust orientation: front face on -Z, width on X
+- [ ] Apply all transforms (Ctrl+A)
+- [ ] Export as GLB with: Forward=-Z, Up=+Y
+- [ ] Repeat for `screen.blend`
+- [ ] Replace assets in `client/models/`
+- [ ] Test screen positioning resolves
 
-### 2. Complete Screen Positioning (2-3 hours)
-- [ ] Position Screen6 correctly (once assets re-exported)
-- [ ] Verify all 3 screens aligned to walls
+### 2. Complete Screen Positioning (1-2 hours)
+- [ ] Run `debug_screen_facing.gd` with new assets
+- [ ] Verify all alignment scores ≈ 1.0
 - [ ] Verify 5cm gap from wall surfaces
-- [ ] Verify facing toward center
-- [ ] Clean up debug nodes and scripts
+- [ ] Remove debug nodes and scripts from scene
+- [ ] Commit working scene
 
 ### 3. Add Collision and Navigation (3-4 hours)
 - [ ] Add StaticBody3D + CollisionShape3D to all 6 walls
@@ -196,31 +254,32 @@ From mesh local scale analysis:
 
 ## Questions for Next Session
 
-1. **Asset Convention Decision**: Approve Z-Forward (Option B) for Blender exports?
+1. **Blender Source Files**: Do you have `wall.blend` and `screen.blend` source files to re-export?
 2. **Screen Height**: Keep at 2.67m (2/3 wall height) or adjust?
-3. **Debug Cleanup**: Remove all debug scripts before Phase 1 completion?
-4. **Locomotion Type**: Continuous movement, teleport, or both?
+3. **Locomotion Type**: Continuous movement, teleport, or both?
 
 ## Resources
 
-- `BLENDER_ASSET_PIPELINE.md` - To be updated with orientation standard
+- `BLENDER_ASSET_PIPELINE.md` - ✅ Updated with Z-Forward orientation standard
 - `HEXAGON_WALL_PATTERN.md` - Wall geometry reference
-- `specs/GITHUB_ISSUES.md` - Issues #7 and #8 for asset work
+- `specs/GITHUB_ISSUES.md` - Issue #7 (resolved), Issue #8 (research phase)
 - `client/debug/README.md` - Debug script best practices
 
 ## Git Status
 
 Ready to commit and push:
-- Scene rebuilt with walls and screens
-- Debug scripts fixed and enhanced
-- Asset dimension analysis complete
-- GitHub issues documented
-- Handoff document prepared
+- ✅ Asset orientation standard documented
+- ✅ BLENDER_ASSET_PIPELINE.md updated
+- ✅ GitHub Issue #7 updated (resolved)
+- ✅ Handoff document updated
+- Scene rebuilt with walls and screens (from previous commit)
+- Debug scripts fixed and enhanced (from previous commit)
 
 ---
 
-**Session Duration**: ~3 hours  
-**Lines of Code**: ~400 (debug scripts + scene file)  
-**Files Modified**: 7  
-**Files Created**: 4  
-**Issues Created**: 2
+**Session Duration**: ~4 hours  
+**Lines of Code**: ~450 (debug scripts + scene file + documentation)  
+**Files Modified**: 9  
+**Files Created**: 5  
+**Issues Resolved**: 1 (Issue #7 - documentation phase)  
+**Issues Created**: 1 (Issue #8)

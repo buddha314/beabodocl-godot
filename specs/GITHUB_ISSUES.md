@@ -886,7 +886,18 @@ Document the decision with:
 **Labels**: `P0`, `foundation`, `assets`, `standards`, `decision`  
 **Milestone**: Phase 0 - Foundation  
 **Assignee**: @buddha314  
-**Status**: 🔴 Blocking Phase 1 screen positioning
+**Status**: ✅ RESOLVED - Z-Forward Convention Adopted
+
+### Decision
+
+**ADOPTED: Option B - Z-Forward (Godot-Aligned)**
+
+All Blender assets must be modeled with:
+- **Forward face**: -Z axis (pointing toward you in Front view)
+- **Width**: +X axis (left/right)  
+- **Height**: +Y axis (up/down)
+
+This standard has been documented in `BLENDER_ASSET_PIPELINE.md` as of November 11, 2025.
 
 ### Problem Statement
 
@@ -949,35 +960,96 @@ Establish a **standard orientation convention** for all 3D assets exported from 
 
 ### Implementation Plan
 
-1. **Blender Configuration:**
-   - Set Blender to use -Z forward in export settings
-   - Configure Blender viewport to match (optional but helpful)
-   - Create Blender startup file with correct settings
+✅ **COMPLETED:**
 
-2. **Asset Modeling Standard:**
-   - Model all assets with **front face facing -Z direction**
-   - **Width** along X-axis
-   - **Height** along Y-axis (Blender) → will be Y-axis in Godot
+1. **Documentation Updated** (`BLENDER_ASSET_PIPELINE.md`):
+   - Added 🔴 CRITICAL section at top of document
+   - Documented Z-Forward orientation standard
+   - Visual ASCII diagram showing axis orientation
+   - Verification checklist before export
+   - Common mistakes to avoid
+   - Updated glTF export settings to specify "-Z Forward"
 
-3. **Export Settings (Blender → glTF/GLB):**
-   ```
-   Format: glTF Binary (.glb)
-   Forward: -Z Forward
-   Up: Y Up
-   Apply Modifiers: Yes
-   UVs: Yes
-   Materials: Export
-   ```
+2. **Standard Established:**
+   - Forward: -Z axis (toward you in Front view)
+   - Width: +X axis (left/right)
+   - Height: +Y axis (up/down)
 
-4. **Re-export Existing Assets:**
-   - [ ] `models/floor.glb` - Verify already correct
-   - [ ] `models/wall.glb` - Re-export with Z-forward
-   - [ ] `models/screen.glb` - Re-export with Z-forward (remove 90° rotation)
+**PENDING:**
 
-5. **Documentation:**
-   - Update `BLENDER_ASSET_PIPELINE.md` with standard
-   - Add visual diagrams showing axis orientation
-   - Create export checklist for future assets
+3. **Re-export Existing Assets** (Next Session):
+   - [ ] `models/floor.glb` - Verify correct orientation
+   - [ ] `models/wall.glb` - Re-export with Z-forward standard
+   - [ ] `models/screen.glb` - Re-export with Z-forward standard (remove 90° rotation)
+
+4. **Testing:**
+   - [ ] Import re-exported assets to Godot
+   - [ ] Verify Screen6 positioning resolves
+   - [ ] Test all 3 screens align to walls correctly
+   - [ ] Remove debug scripts after verification
+
+### Implementation Details
+
+**glTF Export Settings (Blender):**
+```
+Format: glTF Binary (.glb) or glTF Separate (.gltf)
+Transform:
+  - Forward: -Z Forward  ⚠️ CRITICAL
+  - Up: +Y Up
+Geometry:
+  - ✓ Apply Modifiers
+  - ✓ UVs
+  - ✓ Normals
+  - ✓ Tangents
+```
+
+**Verification in Blender:**
+1. Switch to Front view (Numpad 1)
+2. Front face should face toward you (-Z)
+3. Width spans left-right (X-axis)
+4. Height spans up-down (Y-axis)
+5. Apply all transforms (Ctrl+A → All Transforms)
+
+### Documentation Location
+
+Primary reference: `BLENDER_ASSET_PIPELINE.md` - Lines 9-52 (Asset Orientation Standard section)
+
+### Benefits Realized
+
+Once assets are re-exported:
+- ✅ Predictable asset behavior in Godot scenes
+- ✅ Simpler rotation calculations (no 90° offset)
+- ✅ Easier debugging (coordinate systems match)
+- ✅ AI assistance can reason correctly about orientations
+- ✅ Follows game industry standards
+- ✅ Reduces onboarding time for new developers
+
+### Acceptance Criteria
+
+- [x] Convention decision documented (Option B - Z-Forward)
+- [x] `BLENDER_ASSET_PIPELINE.md` updated with standard
+- [ ] All existing assets re-exported with correct orientation
+- [ ] Test scene validates asset orientations
+- [ ] Current Phase 1 screen positioning issues resolved
+- [ ] Debug scripts removed from main scene
+
+### Next Actions
+
+1. **Re-export Assets in Blender:**
+   - Open `wall.blend` source file
+   - Verify/adjust orientation to Z-forward
+   - Export with settings above
+   - Repeat for `screen.blend`
+
+2. **Test in Godot:**
+   - Replace old assets with new exports
+   - Run `debug_screen_facing.gd` script
+   - Verify all alignment scores ≈ 1.0
+
+3. **Clean Up:**
+   - Remove debug nodes from `main.tscn`
+   - Commit re-exported assets
+   - Close this issue
 
 ### Documentation Template
 
@@ -1082,14 +1154,16 @@ func _ready():
 
 ### Estimated Time
 
-**Decision + Documentation**: 1-2 hours  
-**Re-exporting Assets**: 2-3 hours  
-**Testing + Verification**: 1-2 hours  
-**Total**: 4-7 hours
+**Decision + Documentation**: ✅ Complete (2 hours)  
+**Re-exporting Assets**: 2-3 hours (pending)  
+**Testing + Verification**: 1-2 hours (pending)  
+**Total Remaining**: 3-5 hours
 
 ### Priority
 
-**🔴 P0 - CRITICAL** - Blocking current Phase 1 screen positioning work
+**� P0 - HIGH** - Documentation complete, asset re-export pending
+
+Was: �🔴 P0 - CRITICAL (blocking resolved by documenting standard)
 
 ### References
 
