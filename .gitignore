@@ -57,6 +57,7 @@ local.properties
 # Temporary files
 *.tmp
 *.bak
+*.backup
 *.cache
 
 # Quest-specific

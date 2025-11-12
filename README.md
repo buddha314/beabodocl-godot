@@ -23,6 +23,7 @@ For backend setup instructions, see: https://github.com/buddha314/babocument
 * **Asset Workflow**: ✅ Blender-first (.glb export workflow established) ⭐ CRITICAL
 * **Development Tools**: Godot Editor + GDScript (scene-based, not pure code)
 * **Blender Pipeline**: ✅ .glb export from Blender (avoid path configuration issues)
+* **⭐ ALWAYS CHECK FOR GODOT PACKAGES FIRST**: Before building any subsystem (locomotion, interaction, UI, etc.), search for existing Godot addons/packages. The Godot ecosystem has battle-tested solutions (like Godot XR Tools) that handle edge cases we'd miss.
 
 ## Current Status
 
@@ -40,6 +41,13 @@ For backend setup instructions, see: https://github.com/buddha314/babocument
 - Panel interaction system (ray-casting from controllers)
 
 **Next:** Chat panel UI integration with API client
+
+---
+
+**⚠️ CRITICAL DEVELOPMENT PRINCIPLE:**
+* **Check Godot Packages FIRST**: Before implementing any major subsystem, search the Godot asset library and GitHub for existing solutions
+* **XR Tools Reference**: For VR mechanics (locomotion, interaction, UI), check [Godot XR Tools](https://github.com/GodotVR/godot-xr-tools) first
+* **Why**: Community packages handle edge cases, platform differences, and OpenXR quirks that take weeks to discover independently
 
 ---
 

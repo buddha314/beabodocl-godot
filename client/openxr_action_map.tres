@@ -1,5 +1,70 @@
-[gd_resource type="OpenXRActionMap" format=3]
+[gd_resource type="OpenXRActionMap" load_steps=15 format=3 uid="uid://c53uca3uf321k"]
+
+[sub_resource type="OpenXRAction" id="OpenXRAction_primary"]
+resource_name = "primary"
+localized_name = "Primary Thumbstick"
+action_type = 3
+toplevel_paths = ["/user/hand/left", "/user/hand/right"]
+
+[sub_resource type="OpenXRAction" id="OpenXRAction_grip"]
+resource_name = "grip"
+localized_name = "Grip"
+action_type = 1
+toplevel_paths = ["/user/hand/left", "/user/hand/right"]
+
+[sub_resource type="OpenXRAction" id="OpenXRAction_trigger"]
+resource_name = "trigger"
+localized_name = "Trigger"
+action_type = 1
+toplevel_paths = ["/user/hand/left", "/user/hand/right"]
+
+[sub_resource type="OpenXRAction" id="OpenXRAction_haptic"]
+resource_name = "haptic"
+localized_name = "Haptic"
+action_type = 2
+toplevel_paths = ["/user/hand/left", "/user/hand/right"]
+
+[sub_resource type="OpenXRActionSet" id="OpenXRActionSet_default"]
+resource_name = "default"
+localized_name = "Default"
+actions = [SubResource("OpenXRAction_primary"), SubResource("OpenXRAction_grip"), SubResource("OpenXRAction_trigger"), SubResource("OpenXRAction_haptic")]
+
+[sub_resource type="OpenXRIPBinding" id="OpenXRIPBinding_6ivru_l"]
+action = SubResource("OpenXRAction_primary")
+binding_path = "/user/hand/left/input/thumbstick"
+
+[sub_resource type="OpenXRIPBinding" id="OpenXRIPBinding_6ivru_r"]
+action = SubResource("OpenXRAction_primary")
+binding_path = "/user/hand/right/input/thumbstick"
+
+[sub_resource type="OpenXRIPBinding" id="OpenXRIPBinding_5w03k"]
+action = SubResource("OpenXRAction_grip")
+binding_path = "/user/hand/left/input/squeeze/value"
+
+[sub_resource type="OpenXRIPBinding" id="OpenXRIPBinding_typ1r"]
+action = SubResource("OpenXRAction_grip")
+binding_path = "/user/hand/right/input/squeeze/value"
+
+[sub_resource type="OpenXRIPBinding" id="OpenXRIPBinding_clvbf"]
+action = SubResource("OpenXRAction_trigger")
+binding_path = "/user/hand/left/input/trigger/value"
+
+[sub_resource type="OpenXRIPBinding" id="OpenXRIPBinding_5bppb"]
+action = SubResource("OpenXRAction_trigger")
+binding_path = "/user/hand/right/input/trigger/value"
+
+[sub_resource type="OpenXRIPBinding" id="OpenXRIPBinding_3k6la"]
+action = SubResource("OpenXRAction_haptic")
+binding_path = "/user/hand/left/output/haptic"
+
+[sub_resource type="OpenXRIPBinding" id="OpenXRIPBinding_i8esw"]
+action = SubResource("OpenXRAction_haptic")
+binding_path = "/user/hand/right/output/haptic"
+
+[sub_resource type="OpenXRInteractionProfile" id="OpenXRInteractionProfile_meta"]
+interaction_profile_path = "/interaction_profiles/oculus/touch_controller"
+bindings = [SubResource("OpenXRIPBinding_6ivru_l"), SubResource("OpenXRIPBinding_6ivru_r"), SubResource("OpenXRIPBinding_5w03k"), SubResource("OpenXRIPBinding_typ1r"), SubResource("OpenXRIPBinding_clvbf"), SubResource("OpenXRIPBinding_5bppb"), SubResource("OpenXRIPBinding_3k6la"), SubResource("OpenXRIPBinding_i8esw")]
 
 [resource]
-action_sets = []
-interaction_profiles = []
+action_sets = [SubResource("OpenXRActionSet_default")]
+interaction_profiles = [SubResource("OpenXRInteractionProfile_meta")]
