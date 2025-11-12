@@ -4,25 +4,23 @@
 resource_name = "primary"
 localized_name = "Primary Thumbstick"
 action_type = 3
-toplevel_paths = ["/user/hand/left", "/user/hand/right"]
+toplevel_paths = PackedStringArray("/user/hand/left", "/user/hand/right")
 
 [sub_resource type="OpenXRAction" id="OpenXRAction_grip"]
 resource_name = "grip"
 localized_name = "Grip"
-action_type = 1
-toplevel_paths = ["/user/hand/left", "/user/hand/right"]
+toplevel_paths = PackedStringArray("/user/hand/left", "/user/hand/right")
 
 [sub_resource type="OpenXRAction" id="OpenXRAction_trigger"]
 resource_name = "trigger"
 localized_name = "Trigger"
-action_type = 1
-toplevel_paths = ["/user/hand/left", "/user/hand/right"]
+toplevel_paths = PackedStringArray("/user/hand/left", "/user/hand/right")
 
 [sub_resource type="OpenXRAction" id="OpenXRAction_haptic"]
 resource_name = "haptic"
 localized_name = "Haptic"
 action_type = 2
-toplevel_paths = ["/user/hand/left", "/user/hand/right"]
+toplevel_paths = PackedStringArray("/user/hand/left", "/user/hand/right")
 
 [sub_resource type="OpenXRActionSet" id="OpenXRActionSet_default"]
 resource_name = "default"
